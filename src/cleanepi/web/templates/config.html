@@ -1,0 +1,671 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-gear"></i> Configuration</h2>
+    <div>
+        <button class="btn btn-outline-secondary" onclick="resetToDefaults()">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset to Defaults
+        </button>
+        <button class="btn btn-success" onclick="saveConfiguration()">
+            <i class="bi bi-save"></i> Save Configuration
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Configuration Form -->
+        <form id="configForm">
+            <!-- Column Standardization -->
+            <div class="config-section">
+                <h5><i class="bi bi-alphabet"></i> Column Standardization</h5>
+                <p class="text-muted">Normalize column names for consistency</p>
+                
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="standardizeColumns" checked>
+                    <label class="form-check-label" for="standardizeColumns">
+                        <strong>Enable column name standardization</strong>
+                    </label>
+                </div>
+                
+                <div id="columnOptions" class="ms-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="removeSpaces" checked>
+                                <label class="form-check-label" for="removeSpaces">Remove spaces</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="toLowerCase" checked>
+                                <label class="form-check-label" for="toLowerCase">Convert to lowercase</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="removeSpecialChars" checked>
+                                <label class="form-check-label" for="removeSpecialChars">Remove special characters</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="snakeCase" checked>
+                                <label class="form-check-label" for="snakeCase">Use snake_case</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Missing Value Handling -->
+            <div class="config-section">
+                <h5><i class="bi bi-question-circle"></i> Missing Value Handling</h5>
+                <p class="text-muted">Configure how missing or null values are handled</p>
+                
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="replaceMissing" checked>
+                    <label class="form-check-label" for="replaceMissing">
+                        <strong>Enable missing value replacement</strong>
+                    </label>
+                </div>
+                
+                <div id="missingOptions" class="ms-4">
+                    <div class="mb-3">
+                        <label for="naStrings" class="form-label">Strings to treat as missing values</label>
+                        <textarea class="form-control" id="naStrings" rows="3" 
+                                  placeholder="Enter one value per line">-99
+N/A
+NULL
+
+missing
+unknown</textarea>
+                        <div class="form-text">One value per line. These will be converted to null/NaN.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="targetColumns" class="form-label">Target columns (leave empty for all columns)</label>
+                        <input type="text" class="form-control" id="targetColumns" 
+                               placeholder="column1, column2, column3">
+                        <div class="form-text">Comma-separated list of column names to process.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Duplicate Removal -->
+            <div class="config-section">
+                <h5><i class="bi bi-files"></i> Duplicate Removal</h5>
+                <p class="text-muted">Remove duplicate rows from the dataset</p>
+                
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="removeDuplicates" checked>
+                    <label class="form-check-label" for="removeDuplicates">
+                        <strong>Enable duplicate removal</strong>
+                    </label>
+                </div>
+                
+                <div id="duplicateOptions" class="ms-4">
+                    <div class="mb-3">
+                        <label for="duplicateSubset" class="form-label">Columns to consider for duplicates</label>
+                        <input type="text" class="form-control" id="duplicateSubset" 
+                               placeholder="Leave empty to use all columns">
+                        <div class="form-text">Comma-separated list of column names. Empty means all columns.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="duplicateKeep" class="form-label">Which duplicates to keep</label>
+                        <select class="form-select" id="duplicateKeep">
+                            <option value="first">Keep first occurrence</option>
+                            <option value="last">Keep last occurrence</option>
+                            <option value="False">Remove all duplicates</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Constant Column Removal -->
+            <div class="config-section">
+                <h5><i class="bi bi-dash-circle"></i> Constant Column Removal</h5>
+                <p class="text-muted">Remove columns that have the same value in all rows</p>
+                
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="removeConstants" checked>
+                    <label class="form-check-label" for="removeConstants">
+                        <strong>Enable constant column removal</strong>
+                    </label>
+                </div>
+                
+                <div id="constantOptions" class="ms-4">
+                    <div class="mb-3">
+                        <label for="constantCutoff" class="form-label">Constant threshold</label>
+                        <input type="range" class="form-range" id="constantCutoff" min="0.5" max="1.0" step="0.05" value="1.0">
+                        <div class="d-flex justify-content-between">
+                            <small>50% same value</small>
+                            <small id="cutoffValue">100% same value</small>
+                        </div>
+                        <div class="form-text">Proportion of values that must be the same to remove column.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="excludeColumns" class="form-label">Columns to exclude from constant checking</label>
+                        <input type="text" class="form-control" id="excludeColumns" 
+                               placeholder="id, timestamp, key_column">
+                        <div class="form-text">Comma-separated list of column names to never remove.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date Standardization -->
+            <div class="config-section">
+                <h5><i class="bi bi-calendar"></i> Date Standardization</h5>
+                <p class="text-muted">Standardize date formats and validate date ranges</p>
+                
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="standardizeDates">
+                    <label class="form-check-label" for="standardizeDates">
+                        <strong>Enable date standardization</strong>
+                    </label>
+                </div>
+                
+                <div id="dateOptions" class="ms-4" style="display: none;">
+                    <div class="mb-3">
+                        <label for="dateColumns" class="form-label">Date columns</label>
+                        <input type="text" class="form-control" id="dateColumns" 
+                               placeholder="birth_date, visit_date, created_at">
+                        <div class="form-text">Comma-separated list of columns containing dates.</div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="startDate" class="form-label">Valid date range - Start</label>
+                            <input type="date" class="form-control" id="startDate" value="1900-01-01">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="endDate" class="form-label">Valid date range - End</label>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <label for="errorTolerance" class="form-label">Error tolerance</label>
+                        <input type="range" class="form-range" id="errorTolerance" min="0" max="1" step="0.1" value="0.4">
+                        <div class="d-flex justify-content-between">
+                            <small>0% errors allowed</small>
+                            <small id="toleranceValue">40% errors allowed</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject ID Validation -->
+            <div class="config-section">
+                <h5><i class="bi bi-person-badge"></i> Subject ID Validation</h5>
+                <p class="text-muted">Validate and standardize subject identifiers</p>
+                
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="validateSubjectIds">
+                    <label class="form-check-label" for="validateSubjectIds">
+                        <strong>Enable subject ID validation</strong>
+                    </label>
+                </div>
+                
+                <div id="subjectIdOptions" class="ms-4" style="display: none;">
+                    <div class="mb-3">
+                        <label for="subjectIdColumns" class="form-label">Subject ID columns</label>
+                        <input type="text" class="form-control" id="subjectIdColumns" 
+                               placeholder="subject_id, participant_id, patient_id">
+                        <div class="form-text">Comma-separated list of columns containing subject IDs.</div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="idPrefix" class="form-label">Expected prefix</label>
+                            <input type="text" class="form-control" id="idPrefix" placeholder="SUB_">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="idSuffix" class="form-label">Expected suffix</label>
+                            <input type="text" class="form-control" id="idSuffix" placeholder="_001">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="idLength" class="form-label">Expected length</label>
+                            <input type="number" class="form-control" id="idLength" placeholder="10">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Settings -->
+            <div class="config-section">
+                <h5><i class="bi bi-sliders"></i> Global Settings</h5>
+                <p class="text-muted">General configuration options</p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="verbose" checked>
+                            <label class="form-check-label" for="verbose">
+                                Verbose output
+                            </label>
+                        </div>
+                        
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="strictValidation">
+                            <label class="form-check-label" for="strictValidation">
+                                Strict validation (raise errors on validation failures)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="maxMemory" class="form-label">Maximum memory usage</label>
+                            <select class="form-select" id="maxMemory">
+                                <option value="">No limit</option>
+                                <option value="500MB">500 MB</option>
+                                <option value="1GB">1 GB</option>
+                                <option value="2GB">2 GB</option>
+                                <option value="4GB">4 GB</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Configuration Preview -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-code"></i>
+                    Configuration Preview
+                </h5>
+            </div>
+            <div class="card-body">
+                <pre id="configPreview" class="bg-light p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 0.875rem;"></pre>
+                <div class="mt-3">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="copyConfigToClipboard()">
+                        <i class="bi bi-clipboard"></i> Copy to Clipboard
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configuration Presets -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-bookmark"></i>
+                    Configuration Presets
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary" onclick="loadPreset('basic')">
+                        <i class="bi bi-star"></i> Basic Cleaning
+                    </button>
+                    <button class="btn btn-outline-primary" onclick="loadPreset('epidemiological')">
+                        <i class="bi bi-hospital"></i> Epidemiological Data
+                    </button>
+                    <button class="btn btn-outline-primary" onclick="loadPreset('clinical')">
+                        <i class="bi bi-heart-pulse"></i> Clinical Data
+                    </button>
+                    <button class="btn btn-outline-primary" onclick="loadPreset('survey')">
+                        <i class="bi bi-clipboard-check"></i> Survey Data
+                    </button>
+                </div>
+                
+                <hr>
+                
+                <h6>Save Custom Preset</h6>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="presetName" placeholder="Preset name">
+                    <button class="btn btn-outline-secondary" onclick="savePreset()">
+                        <i class="bi bi-save"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-info-circle"></i>
+                    Help
+                </h5>
+            </div>
+            <div class="card-body">
+                <h6>Configuration Tips:</h6>
+                <ul class="list-unstyled small">
+                    <li><i class="bi bi-lightbulb text-warning"></i> Start with a preset that matches your data type</li>
+                    <li><i class="bi bi-lightbulb text-warning"></i> Test with a small sample first</li>
+                    <li><i class="bi bi-lightbulb text-warning"></i> Review the preview before applying</li>
+                    <li><i class="bi bi-lightbulb text-warning"></i> Save custom configurations for reuse</li>
+                </ul>
+                
+                <h6 class="mt-3">Common Settings:</h6>
+                <ul class="list-unstyled small">
+                    <li><strong>Basic:</strong> Column standardization + missing values</li>
+                    <li><strong>Thorough:</strong> All cleaning operations enabled</li>
+                    <li><strong>Conservative:</strong> Only safe operations (no data removal)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize form listeners
+    setupFormListeners();
+    updateConfigPreview();
+    
+    // Set today's date as default end date
+    document.getElementById('endDate').value = new Date().toISOString().split('T')[0];
+    
+    function setupFormListeners() {
+        // Main toggle listeners
+        document.getElementById('standardizeColumns').addEventListener('change', function() {
+            document.getElementById('columnOptions').style.display = this.checked ? 'block' : 'none';
+            updateConfigPreview();
+        });
+        
+        document.getElementById('replaceMissing').addEventListener('change', function() {
+            document.getElementById('missingOptions').style.display = this.checked ? 'block' : 'none';
+            updateConfigPreview();
+        });
+        
+        document.getElementById('removeDuplicates').addEventListener('change', function() {
+            document.getElementById('duplicateOptions').style.display = this.checked ? 'block' : 'none';
+            updateConfigPreview();
+        });
+        
+        document.getElementById('removeConstants').addEventListener('change', function() {
+            document.getElementById('constantOptions').style.display = this.checked ? 'block' : 'none';
+            updateConfigPreview();
+        });
+        
+        document.getElementById('standardizeDates').addEventListener('change', function() {
+            document.getElementById('dateOptions').style.display = this.checked ? 'block' : 'none';
+            updateConfigPreview();
+        });
+        
+        document.getElementById('validateSubjectIds').addEventListener('change', function() {
+            document.getElementById('subjectIdOptions').style.display = this.checked ? 'block' : 'none';
+            updateConfigPreview();
+        });
+        
+        // Range input listeners
+        document.getElementById('constantCutoff').addEventListener('input', function() {
+            document.getElementById('cutoffValue').textContent = Math.round(this.value * 100) + '% same value';
+            updateConfigPreview();
+        });
+        
+        document.getElementById('errorTolerance').addEventListener('input', function() {
+            document.getElementById('toleranceValue').textContent = Math.round(this.value * 100) + '% errors allowed';
+            updateConfigPreview();
+        });
+        
+        // Add listeners to all form inputs
+        const form = document.getElementById('configForm');
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('change', updateConfigPreview);
+            input.addEventListener('input', updateConfigPreview);
+        });
+    }
+    
+    function updateConfigPreview() {
+        const config = buildConfiguration();
+        document.getElementById('configPreview').textContent = JSON.stringify(config, null, 2);
+    }
+    
+    function buildConfiguration() {
+        const config = {};
+        
+        // Column standardization
+        if (document.getElementById('standardizeColumns').checked) {
+            config.standardize_column_names = {
+                remove_spaces: document.getElementById('removeSpaces').checked,
+                to_lower_case: document.getElementById('toLowerCase').checked,
+                remove_special_chars: document.getElementById('removeSpecialChars').checked,
+                snake_case: document.getElementById('snakeCase').checked
+            };
+        } else {
+            config.standardize_column_names = false;
+        }
+        
+        // Missing values
+        if (document.getElementById('replaceMissing').checked) {
+            const naStrings = document.getElementById('naStrings').value
+                .split('\n')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+            
+            const targetColumns = document.getElementById('targetColumns').value
+                .split(',')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+            
+            config.replace_missing_values = {
+                na_strings: naStrings.length > 0 ? naStrings : undefined,
+                target_columns: targetColumns.length > 0 ? targetColumns : undefined
+            };
+        }
+        
+        // Duplicates
+        if (document.getElementById('removeDuplicates').checked) {
+            const subset = document.getElementById('duplicateSubset').value
+                .split(',')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+            
+            config.remove_duplicates = {
+                subset: subset.length > 0 ? subset : undefined,
+                keep: document.getElementById('duplicateKeep').value
+            };
+        }
+        
+        // Constants
+        if (document.getElementById('removeConstants').checked) {
+            const excludeColumns = document.getElementById('excludeColumns').value
+                .split(',')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+            
+            config.remove_constants = {
+                cutoff: parseFloat(document.getElementById('constantCutoff').value),
+                exclude_columns: excludeColumns.length > 0 ? excludeColumns : undefined
+            };
+        }
+        
+        // Date standardization
+        if (document.getElementById('standardizeDates').checked) {
+            const dateColumns = document.getElementById('dateColumns').value
+                .split(',')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+            
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            config.standardize_dates = {
+                target_columns: dateColumns.length > 0 ? dateColumns : undefined,
+                timeframe: (startDate && endDate) ? [startDate, endDate] : undefined,
+                error_tolerance: parseFloat(document.getElementById('errorTolerance').value)
+            };
+        }
+        
+        // Subject ID validation
+        if (document.getElementById('validateSubjectIds').checked) {
+            const subjectIdColumns = document.getElementById('subjectIdColumns').value
+                .split(',')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+            
+            if (subjectIdColumns.length > 0) {
+                config.standardize_subject_ids = {
+                    target_columns: subjectIdColumns,
+                    prefix: document.getElementById('idPrefix').value || undefined,
+                    suffix: document.getElementById('idSuffix').value || undefined,
+                    nchar: parseInt(document.getElementById('idLength').value) || undefined
+                };
+            }
+        }
+        
+        // Global settings
+        config.verbose = document.getElementById('verbose').checked;
+        config.strict_validation = document.getElementById('strictValidation').checked;
+        
+        const maxMemory = document.getElementById('maxMemory').value;
+        if (maxMemory) {
+            config.max_memory_usage = maxMemory;
+        }
+        
+        return config;
+    }
+    
+    function loadPreset(presetName) {
+        const presets = {
+            basic: {
+                standardizeColumns: true,
+                replaceMissing: true,
+                removeDuplicates: true,
+                removeConstants: false,
+                standardizeDates: false,
+                validateSubjectIds: false
+            },
+            epidemiological: {
+                standardizeColumns: true,
+                replaceMissing: true,
+                removeDuplicates: true,
+                removeConstants: true,
+                standardizeDates: true,
+                validateSubjectIds: true,
+                dateColumns: 'birth_date, symptom_onset, diagnosis_date',
+                subjectIdColumns: 'patient_id, case_id'
+            },
+            clinical: {
+                standardizeColumns: true,
+                replaceMissing: true,
+                removeDuplicates: true,
+                removeConstants: true,
+                standardizeDates: true,
+                validateSubjectIds: true,
+                dateColumns: 'admission_date, discharge_date, procedure_date',
+                subjectIdColumns: 'patient_id, medical_record_number'
+            },
+            survey: {
+                standardizeColumns: true,
+                replaceMissing: true,
+                removeDuplicates: true,
+                removeConstants: true,
+                standardizeDates: false,
+                validateSubjectIds: false,
+                naStrings: '-99\nN/A\nRefused\nDon\'t know\nPrefer not to answer'
+            }
+        };
+        
+        const preset = presets[presetName];
+        if (!preset) return;
+        
+        // Apply preset values
+        Object.entries(preset).forEach(([key, value]) => {
+            const element = document.getElementById(key);
+            if (element) {
+                if (element.type === 'checkbox') {
+                    element.checked = value;
+                } else {
+                    element.value = value;
+                }
+                // Trigger change event
+                element.dispatchEvent(new Event('change'));
+            }
+        });
+        
+        showAlert(`Loaded "${presetName}" preset configuration`, 'success');
+    }
+    
+    function savePreset() {
+        const name = document.getElementById('presetName').value.trim();
+        if (!name) {
+            showAlert('Please enter a preset name', 'warning');
+            return;
+        }
+        
+        const config = buildConfiguration();
+        
+        // Save to localStorage
+        const presets = JSON.parse(localStorage.getItem('cleanepi_presets') || '{}');
+        presets[name] = config;
+        localStorage.setItem('cleanepi_presets', JSON.stringify(presets));
+        
+        showAlert(`Saved preset "${name}"`, 'success');
+        document.getElementById('presetName').value = '';
+    }
+    
+    function copyConfigToClipboard() {
+        const config = JSON.stringify(buildConfiguration(), null, 2);
+        navigator.clipboard.writeText(config).then(() => {
+            showAlert('Configuration copied to clipboard', 'success');
+        }).catch(() => {
+            showAlert('Failed to copy to clipboard', 'danger');
+        });
+    }
+    
+    function resetToDefaults() {
+        if (!confirm('Reset all settings to defaults?')) return;
+        
+        // Reset all form elements
+        document.getElementById('configForm').reset();
+        
+        // Set default checked states
+        document.getElementById('standardizeColumns').checked = true;
+        document.getElementById('replaceMissing').checked = true;
+        document.getElementById('removeDuplicates').checked = true;
+        document.getElementById('removeConstants').checked = true;
+        document.getElementById('verbose').checked = true;
+        
+        // Set default values
+        document.getElementById('constantCutoff').value = 1.0;
+        document.getElementById('errorTolerance').value = 0.4;
+        document.getElementById('duplicateKeep').value = 'first';
+        document.getElementById('endDate').value = new Date().toISOString().split('T')[0];
+        
+        // Update visibility and preview
+        setupFormListeners();
+        updateConfigPreview();
+        
+        showAlert('Configuration reset to defaults', 'info');
+    }
+    
+    function saveConfiguration() {
+        const config = buildConfiguration();
+        
+        // Save to localStorage
+        localStorage.setItem('cleanepi_config', JSON.stringify(config));
+        
+        showAlert('Configuration saved successfully', 'success');
+    }
+    
+    // Global functions
+    window.loadPreset = loadPreset;
+    window.savePreset = savePreset;
+    window.copyConfigToClipboard = copyConfigToClipboard;
+    window.resetToDefaults = resetToDefaults;
+    window.saveConfiguration = saveConfiguration;
+    
+    // Load saved configuration if exists
+    const savedConfig = localStorage.getItem('cleanepi_config');
+    if (savedConfig) {
+        try {
+            const config = JSON.parse(savedConfig);
+            // TODO: Apply saved configuration to form
+            console.log('Saved configuration found:', config);
+        } catch (error) {
+            console.error('Failed to load saved configuration:', error);
+        }
+    }
+});
+</script>
+{% endblock %}
