@@ -95,28 +95,183 @@ print(report.summary())
 ```python
 from cleanepi import standardize_dates, DateConfig
 
+# Advanced date standardization with intelligent parsing
 date_config = DateConfig(
-    target_columns=["admission_date", "test_date"],
-    formats=["dd/mm/yyyy", "yyyy-mm-dd"],
-    timeframe=("1990-01-01", "2024-12-31"),
+    target_columns=["admission_date", "test_date", "birth_date"],
+    formats=["dd/mm/yyyy", "yyyy-mm-dd", "%d %b %Y"],
+    timeframe=("1900-01-01", "2024-12-31"),
     error_tolerance=0.1
 )
 
 cleaned_data = standardize_dates(data, date_config)
+
+# Auto-detect date columns
+auto_cleaned = standardize_dates(data)  # Automatically finds and converts date columns
+```
+
+### Subject ID Validation
+
+```python
+from cleanepi import check_subject_ids, SubjectIDConfig
+
+# Validate subject IDs with pattern matching
+id_config = SubjectIDConfig(
+    target_columns=["patient_id", "study_id"],
+    prefix="P",
+    nchar=4,
+    range=(1, 9999),
+    pattern=r"^P\d{3}$"  # Custom regex pattern
+)
+
+validated_data = check_subject_ids(data, id_config)
+# Adds validation columns: patient_id_valid, patient_id_issues
+```
+
+### Intelligent Numeric Conversion
+
+```python
+from cleanepi import convert_to_numeric, NumericConfig
+
+# Convert text to numbers with multi-language support
+numeric_config = NumericConfig(
+    target_columns=["age", "income", "percentage"],
+    lang="en",  # Supports "en", "es", "fr"
+    errors="coerce"
+)
+
+# Handles: "twenty-five", "$50,000", "85%", "10-15" (ranges)
+converted_data = convert_to_numeric(data, numeric_config)
 ```
 
 ### Dictionary-Based Cleaning
 
 ```python
-from cleanepi import clean_using_dictionary
+from cleanepi import clean_using_dictionary, create_mapping_dictionary
 
-# Define value mappings
+# Define value mappings for standardization
 dictionary = {
     "sex": {"1": "male", "2": "female", "m": "male", "f": "female"},
-    "status": {"0": "negative", "1": "positive"}
+    "status": {"0": "negative", "1": "positive", "pos": "positive", "neg": "negative"},
+    "result": {"abnormal": "abnormal", "normal": "normal", "abn": "abnormal"}
 }
 
-cleaned_data = clean_using_dictionary(data, dictionary)
+cleaned_data = clean_using_dictionary(
+    data, 
+    dictionary,
+    case_sensitive=False,
+    exact_match=False,  # Allow partial matching
+    default_action="keep"  # Keep unmapped values
+)
+
+# Generate template dictionary from existing data
+template = create_mapping_dictionary(data, ["status", "result"])
+```
+
+### Date Sequence Validation
+
+```python
+from cleanepi import check_date_sequence, generate_date_sequence_report
+
+# Validate chronological order of dates
+sequence_data = check_date_sequence(
+    data,
+    target_columns=["birth_date", "admission_date", "discharge_date"],
+    tolerance_days=1,  # Allow 1-day tolerance
+    allow_equal=True,
+    subject_id_column="patient_id"  # Validate per patient
+)
+
+# Generate comprehensive validation report
+report = generate_date_sequence_report(sequence_data, ["birth_date", "admission_date", "discharge_date"])
+print(f"Valid sequences: {report['summary']['valid_percentage']:.1f}%")
+```
+
+## Comprehensive Example
+
+Here's a complete example showcasing all Phase 2 features working together:
+
+```python
+import pandas as pd
+from cleanepi import clean_data, CleaningConfig
+from cleanepi.core.config import DateConfig, SubjectIDConfig, NumericConfig
+
+# Sample epidemiological data with common data quality issues
+data = pd.DataFrame({
+    'patient_id': ['P001', 'P002', 'P003', 'P004', 'p005'],
+    'birth_date': ['1990-01-15', '15/02/1985', '1995-07-10', '20 Mar 1992', 'unknown'],
+    'admission_date': ['2023-01-10', '2023/02/15', '2023-01-05', '2023-03-20', '2023-01-01'],
+    'discharge_date': ['2023-01-20', '2023/02/10', '2023-01-15', '2023-03-25', '2023-01-05'],
+    'age_text': ['25', 'thirty-five', '28', 'twenty-eight', 'unknown'],
+    'test_result': ['pos', 'neg', 'positive', '1', '0'],
+    'score_pct': ['85%', '90.5%', 'seventy-five percent', '80%', 'N/A'],
+    'income': ['$50,000', '75000', 'sixty thousand', '$45,500', 'missing']
+})
+
+# Comprehensive cleaning configuration
+config = CleaningConfig(
+    # Phase 1 features (already implemented)
+    standardize_column_names=True,
+    replace_missing_values=True,
+    remove_duplicates=True,
+    remove_constants=True,
+    
+    # Phase 2 features (newly implemented)
+    standardize_dates=DateConfig(
+        target_columns=['birth_date', 'admission_date', 'discharge_date'],
+        timeframe=('1900-01-01', '2024-12-31'),
+        error_tolerance=0.2
+    ),
+    
+    standardize_subject_ids=SubjectIDConfig(
+        target_columns=['patient_id'],
+        prefix='P',
+        nchar=4,
+        range=(1, 9999)
+    ),
+    
+    to_numeric=NumericConfig(
+        target_columns=['age_text', 'score_pct', 'income'],
+        lang='en',
+        errors='coerce'
+    ),
+    
+    dictionary={
+        'test_result': {
+            'pos': 'positive',
+            'neg': 'negative', 
+            '1': 'positive',
+            '0': 'negative'
+        }
+    },
+    
+    check_date_sequence=['birth_date', 'admission_date', 'discharge_date']
+)
+
+# Perform comprehensive cleaning
+cleaned_data, report = clean_data(data, config)
+
+# Display results
+print("=== CLEANING RESULTS ===")
+print(f"Original shape: {data.shape}")
+print(f"Cleaned shape: {cleaned_data.shape}")
+print(f"Total operations: {len(report.operations)}")
+print(f"Processing time: {report.duration:.2f}s")
+
+print("\n=== VALIDATION RESULTS ===")
+# Subject ID validation results
+if 'patient_id_valid' in cleaned_data.columns:
+    valid_ids = cleaned_data['patient_id_valid'].sum()
+    total_ids = len(cleaned_data)
+    print(f"Valid patient IDs: {valid_ids}/{total_ids}")
+
+# Date sequence validation results  
+if 'date_sequence_valid' in cleaned_data.columns:
+    valid_sequences = cleaned_data['date_sequence_valid'].sum()
+    print(f"Valid date sequences: {valid_sequences}/{total_ids}")
+
+# Display cleaning report summary
+print("\n=== DETAILED REPORT ===")
+print(report.summary())
 ```
 
 ### Async Processing for Large Datasets
