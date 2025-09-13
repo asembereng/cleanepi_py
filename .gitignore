@@ -157,3 +157,9 @@ output/*.csv
 output/*.xlsx
 output/*.json
 !output/.gitkeep
+
+# Screenshots and demo images
+*.png
+*.jpg
+*.jpeg
+*.gif

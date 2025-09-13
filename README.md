@@ -69,13 +69,14 @@ This Python implementation provides **100% feature parity** with the original R 
 | Feature | R Package | Python Package | Benefit |
 |---------|-----------|----------------|---------|
 | **Command-line interface** | ❌ | ✅ | Batch processing, automation |
-| **Web API (REST)** | ❌ | ✅ | Integration with web apps |
+| **Interactive Web Application** | ❌ | ✅ | User-friendly GUI, job management, real-time processing |
+| **Web API (REST)** | ❌ | ✅ | Integration with web apps, microservices |
 | **Type safety** | ❌ | ✅ | Runtime validation |
-| **Configuration system** | Basic | Advanced | Pydantic models |
-| **Reporting** | Basic | Enhanced | JSON export, metrics |
+| **Configuration system** | Basic | Advanced | Pydantic models, presets, interactive builder |
+| **Reporting** | Basic | Enhanced | JSON export, metrics, web dashboard |
 | **Security features** | Limited | Comprehensive | Input validation, safe operations |
 | **Memory management** | Basic | Advanced | Configurable limits |
-| **Async support** | ❌ | ✅ | Large dataset processing |
+| **Async support** | ❌ | ✅ | Large dataset processing, job queues |
 
 ### 📈 Performance Comparison
 
@@ -117,17 +118,29 @@ cleaned_data, report = clean_data(data, config)
 ## Installation
 
 ```bash
-# Basic installation
+# Basic installation (CLI and Python API only)
 pip install cleanepi-python
 
-# With optional dependencies for web applications
+# Recommended: With web application support
 pip install cleanepi-python[web]
 
 # With performance enhancements for large datasets
 pip install cleanepi-python[performance]
 
+# Complete installation (web + performance)
+pip install cleanepi-python[web,performance]
+
 # Development installation
 pip install cleanepi-python[dev]
+```
+
+### Web Application Dependencies
+For the full web application experience, install with web support:
+```bash
+pip install cleanepi-python[web]
+
+# Or manually install web dependencies:
+pip install fastapi uvicorn httpx python-multipart
 ```
 
 ## Quick Start
@@ -421,54 +434,270 @@ cleanepi --help > config_template.txt
 }
 ```
 
-## Web Application Integration
+## Web Application
 
-The package provides a production-ready REST API:
+The package includes a **comprehensive web application** for interactive data cleaning, featuring a modern user interface, job management system, and production-ready REST API.
+
+### 🚀 Web Application Features
+
+- **Interactive Web Interface**: Modern Bootstrap-based UI with drag-and-drop file upload
+- **Real-time Processing**: Both synchronous and asynchronous processing modes
+- **Job Management**: Complete job queue system with status tracking and monitoring
+- **Advanced Configuration**: Interactive forms with real-time preview and presets
+- **Results Visualization**: Data preview, statistics, and downloadable reports
+- **Professional Dashboard**: Job statistics, progress tracking, and error management
 
 ### Quick Start
+
+#### Installation with Web Dependencies
+```bash
+# Install with web application support
+pip install cleanepi-python[web]
+
+# Or install web dependencies manually
+pip install fastapi uvicorn httpx python-multipart
+```
+
+#### Launch Web Application
 ```python
 from cleanepi.web.api import create_app
 import uvicorn
 
-# Create FastAPI app
+# Create and run web application
 app = create_app()
-
-# Run server
 uvicorn.run(app, host="0.0.0.0", port=8000)
 ```
 
-### API Endpoints
+#### Access Web Interface
 ```bash
-# Check API health
-curl -X GET "http://localhost:8000/health"
+# Open in browser
+http://localhost:8000
+
+# Available pages:
+# http://localhost:8000          - Main upload and processing interface
+# http://localhost:8000/config   - Advanced configuration interface  
+# http://localhost:8000/jobs     - Job management dashboard
+```
+
+### 📱 Interactive Web Interface
+
+#### File Upload and Processing
+- **Drag-and-Drop Upload**: Intuitive file upload with visual feedback
+- **Multi-format Support**: CSV, Excel (.xlsx, .xls), JSON, Parquet files
+- **File Validation**: Automatic format and size validation (100MB limit)
+- **Processing Modes**:
+  - **Synchronous**: Immediate processing with real-time results
+  - **Asynchronous**: Background job processing for large files
+
+#### Configuration Interface
+- **Interactive Forms**: Point-and-click configuration with instant validation
+- **Real-time Preview**: Live JSON configuration preview as you make changes
+- **Configuration Presets**: Pre-built configurations for different data types:
+  - Basic Cleaning
+  - Epidemiological Data
+  - Clinical Data
+  - Survey Data
+- **Custom Presets**: Save and reuse your own configuration templates
+- **Advanced Settings**: Memory limits, error tolerance, verbose output
+
+### 🔄 Job Management System
+
+The web application includes a sophisticated job management system for handling large datasets and concurrent operations:
+
+#### Job Dashboard Features
+- **Real-time Statistics**: Live counters for total, running, completed, and failed jobs
+- **Job Filtering**: Filter by status, search by filename, auto-refresh
+- **Detailed Job View**: Complete job information including:
+  - Processing time and performance metrics
+  - Before/after data shape comparison
+  - Configuration used for processing
+  - Detailed cleaning reports
+  - Data preview with column changes
+  - Error details and debugging information
+
+#### Job Status Tracking
+- **Pending**: Job queued for processing
+- **Running**: Currently being processed with real-time updates  
+- **Completed**: Successfully finished with downloadable results
+- **Failed**: Error occurred with detailed error information
+- **Cancelled**: Manually cancelled by user
+
+#### Async Processing Features
+```python
+# Jobs are automatically queued for async processing
+# Monitor status through web interface or API
+
+# Job management through API
+GET /api/jobs              # List all jobs
+GET /api/jobs/{job_id}     # Get specific job details
+DELETE /api/jobs/{job_id}  # Cancel running job
+POST /api/jobs/submit      # Submit new async job
+```
+
+### 🔧 Configuration Management
+
+#### Interactive Configuration Builder
+The web interface provides a comprehensive configuration builder with:
+
+- **Column Standardization**: Remove spaces, lowercase, special characters, snake_case
+- **Missing Value Handling**: Custom NA strings, target columns, replacement strategies
+- **Duplicate Removal**: Column selection, keep strategy (first/last/none)
+- **Constant Column Removal**: Threshold settings, exclusion lists
+- **Date Standardization**: Format detection, range validation, error tolerance
+- **Subject ID Validation**: Pattern matching, prefix requirements, range validation
+- **Global Settings**: Verbose output, strict validation, memory limits
+
+#### Configuration Presets
+```javascript
+// Available presets through web interface
+{
+  "Basic Cleaning": {
+    standardize_column_names: true,
+    replace_missing_values: true,
+    remove_duplicates: true
+  },
+  "Epidemiological Data": {
+    // Specialized settings for epidemiological datasets
+    standardize_dates: true,
+    validate_subject_ids: true,
+    // ... additional epi-specific settings
+  },
+  "Clinical Data": {
+    // Optimized for clinical trial data
+    strict_validation: true,
+    // ... clinical-specific settings
+  }
+}
+```
+
+### 🌐 REST API Endpoints
+
+The web application exposes a comprehensive REST API for programmatic access:
+
+#### Core Endpoints
+```bash
+# Health and Status
+GET /api/health                    # API health check
+GET /api/config/default           # Get default configuration
+
+# Synchronous Processing
+POST /api/clean                   # Upload and process file immediately
+  # Form data: file, config_json
+
+# Asynchronous Job Management  
+POST /api/jobs/submit             # Submit file for background processing
+GET /api/jobs                     # List jobs with filtering
+GET /api/jobs/{job_id}           # Get specific job details
+DELETE /api/jobs/{job_id}        # Cancel pending/running job
+
+# Web Interface
+GET /                            # Main upload interface
+GET /config                      # Configuration builder
+GET /jobs                        # Job management dashboard
+```
+
+#### API Usage Examples
+```bash
+# Health check
+curl -X GET "http://localhost:8000/api/health"
 # Response: {"status": "healthy", "version": "0.1.0"}
 
 # Get default configuration
-curl -X GET "http://localhost:8000/config/default"
+curl -X GET "http://localhost:8000/api/config/default"
 
-# Clean data file
-curl -X POST "http://localhost:8000/clean" \
+# Process file synchronously
+curl -X POST "http://localhost:8000/api/clean" \
      -F "file=@data.csv" \
+     -F "config_json={\"standardize_column_names\": true, \"remove_duplicates\": true}"
+
+# Submit async job
+curl -X POST "http://localhost:8000/api/jobs/submit" \
+     -F "file=@large_dataset.csv" \
      -F "config_json={\"standardize_column_names\": true}"
 
-# Async processing (for large files)
-curl -X POST "http://localhost:8000/clean/async" \
-     -F "file=@large_data.csv" \
-     -F "config_json={\"remove_duplicates\": true}"
+# Check job status
+curl -X GET "http://localhost:8000/api/jobs/{job_id}"
+
+# List all jobs
+curl -X GET "http://localhost:8000/api/jobs?limit=50"
+
+# Cancel job
+curl -X DELETE "http://localhost:8000/api/jobs/{job_id}"
 ```
 
-### Integration with Web Frameworks
+### 🔌 Integration with Existing Applications
+
+#### Embed in FastAPI Application
 ```python
 from fastapi import FastAPI
 from cleanepi.web.api import create_app
 
 # Add to existing FastAPI app
-main_app = FastAPI()
+main_app = FastAPI(title="My Application")
 cleaning_app = create_app()
 
 # Mount as sub-application
-main_app.mount("/api/cleaning", cleaning_app)
+main_app.mount("/cleaning", cleaning_app)
+
+# Now available at:
+# http://localhost:8000/cleaning/        # Web interface
+# http://localhost:8000/cleaning/api/    # API endpoints
 ```
+
+#### Standalone Deployment
+```python
+# Production deployment
+from cleanepi.web.api import create_app
+import uvicorn
+
+app = create_app()
+
+# Production server
+uvicorn.run(
+    app,
+    host="0.0.0.0",
+    port=8000,
+    workers=4,  # Multiple workers for production
+    log_level="info"
+)
+```
+
+#### Docker Deployment
+```dockerfile
+FROM python:3.9-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY . .
+RUN pip install -e ".[web]"
+
+EXPOSE 8000
+CMD ["uvicorn", "cleanepi.web.api:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+### 📊 Web Application Architecture
+
+#### Frontend Components
+- **Responsive Design**: Bootstrap 5 with mobile-first approach
+- **Interactive Forms**: Real-time validation and preview
+- **File Management**: Drag-and-drop with progress indicators
+- **Data Visualization**: Tables, charts, and statistics
+- **Real-time Updates**: WebSocket-like polling for job status
+
+#### Backend Components
+- **FastAPI Framework**: Modern async web framework
+- **Job Queue System**: Background task processing with status tracking
+- **File Handling**: Secure upload, validation, and temporary file management
+- **Configuration Management**: Pydantic models with validation
+- **Error Handling**: Comprehensive error reporting and logging
+
+#### Security Features
+- **File Validation**: Type and size restrictions
+- **Input Sanitization**: Protection against malicious uploads
+- **Resource Limits**: Memory and processing time constraints
+- **Secure File Handling**: Temporary file cleanup and safe operations
 
 ## Security Features
 
