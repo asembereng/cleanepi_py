@@ -1,0 +1,3 @@
+{"status": {"positive": "pos", "negative": "neg", "unknown": "unk"},
+ "gender": {"M": "Male", "F": "Female", "male": "Male", "female": "Female"},
+ "result": {"pos": "positive", "neg": "negative"}}

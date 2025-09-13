@@ -1,0 +1,8 @@
+"Study ID","Date of Birth","Patient Age","Test Result","Empty Column","Constant Value","Mixed Types","Date Column","Subject ID"
+"PS001P2","01/01/1990","25","positive","","same","1","2023-01-15","ID_001"
+"PS002P2","-99","unknown","negative","","same","two","15/01/2023","ID_002"
+"PS003P2","15/05/1985","35","positive","","same","3.0","2023/01/15","ID_003"
+"PS001P2","01/01/1990","25","positive","","same","1","2023-01-15","ID_001"
+"PS004P2","","30","negative","","same","4","invalid_date","ID_004"
+"PS005P2","1990-01-01","NULL","positive","","same","5","2023-01-16","ID_005"
+"PS006P2","12/31/1995","45","N/A","","same","six","31/12/1995","ID_006"
