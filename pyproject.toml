@@ -1,0 +1,120 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cleanepi-python"
+version = "0.1.0"
+description = "Clean and standardize epidemiological data - Python version"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Karim Mané", email = "karim.mane@lshtm.ac.uk"},
+    {name = "Abdoelnaser Degoot", email = "abdoelnaser-mahmood.degoot@lshtm.ac.uk"},
+]
+keywords = ["epidemiology", "data-cleaning", "data-standardization", "health"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "python-dateutil>=2.8.0",
+    "pydantic>=2.0.0",
+    "loguru>=0.7.0",
+    "typing-extensions>=4.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+]
+web = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.22.0",
+    "pydantic-settings>=2.0.0",
+]
+async = [
+    "aiofiles>=23.0.0",
+    "asyncio-compat>=0.1.0",
+]
+performance = [
+    "dask[dataframe]>=2023.5.0",
+    "pyarrow>=12.0.0",
+]
+
+[project.scripts]
+cleanepi = "cleanepi.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/epiverse-trace/cleanepi"
+Documentation = "https://epiverse-trace.github.io/cleanepi/"
+Repository = "https://github.com/epiverse-trace/cleanepi"
+"Bug Tracker" = "https://github.com/epiverse-trace/cleanepi/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+cleanepi = ["data/*", "config/*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--strict-markers --disable-warnings"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["src/cleanepi"]
+omit = ["*/tests/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]
