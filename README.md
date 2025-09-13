@@ -128,8 +128,8 @@ cleaned_data, report = clean_data(data, config)
 #### Linux/macOS
 ```bash
 # Clone the repository
-git clone https://github.com/epiverse-trace/cleanepi.git
-cd cleanepi
+git clone https://github.com/asembereng/cleanepi_py.git
+cd cleanepi_py
 
 # Install in development mode with all dependencies
 pip install -e ".[dev]"
@@ -144,8 +144,8 @@ cleanepi --help
 #### Windows
 ```cmd
 REM Clone the repository
-git clone https://github.com/epiverse-trace/cleanepi.git
-cd cleanepi
+git clone https://github.com/asembereng/cleanepi_py.git
+cd cleanepi_py
 
 REM Install in development mode with all dependencies
 pip install -e ".[dev]"
@@ -164,8 +164,8 @@ If you prefer not to install the package, you can run it directly as a Python mo
 #### Linux/macOS
 ```bash
 # Clone the repository
-git clone https://github.com/epiverse-trace/cleanepi.git
-cd cleanepi
+git clone https://github.com/asembereng/cleanepi_py.git
+cd cleanepi_py
 
 # Install dependencies only
 pip install -r requirements.txt
@@ -180,8 +180,8 @@ python -c "from cleanepi import clean_data, CleaningConfig; print('Import succes
 #### Windows
 ```cmd
 REM Clone the repository
-git clone https://github.com/epiverse-trace/cleanepi.git
-cd cleanepi
+git clone https://github.com/asembereng/cleanepi_py.git
+cd cleanepi_py
 
 REM Install dependencies only
 pip install -r requirements.txt
