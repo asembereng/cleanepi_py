@@ -143,6 +143,10 @@ dmypy.json
 ehthumbs.db
 Thumbs.db
 
+# Custom test files
+run_web_app.py
+test_web_extension.py
+
 # Temporary files
 /tmp/
 *.tmp

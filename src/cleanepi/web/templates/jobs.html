@@ -1,0 +1,529 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-list-task"></i> Job Management</h2>
+    <div>
+        <button class="btn btn-outline-secondary" onclick="refreshJobs()">
+            <i class="bi bi-arrow-clockwise"></i> Refresh
+        </button>
+        <a href="/" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> New Job
+        </a>
+    </div>
+</div>
+
+<!-- Job Statistics -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 id="totalJobs">0</h4>
+                        <p class="mb-0">Total Jobs</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-clipboard-data display-6"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 id="runningJobs">0</h4>
+                        <p class="mb-0">Running</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-play-circle display-6"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 id="completedJobs">0</h4>
+                        <p class="mb-0">Completed</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-check-circle display-6"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 id="failedJobs">0</h4>
+                        <p class="mb-0">Failed</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-exclamation-circle display-6"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="statusFilter" class="form-label">Filter by Status</label>
+                <select class="form-select" id="statusFilter" onchange="filterJobs()">
+                    <option value="">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="running">Running</option>
+                    <option value="completed">Completed</option>
+                    <option value="failed">Failed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="searchInput" class="form-label">Search by Filename</label>
+                <input type="text" class="form-control" id="searchInput" placeholder="Enter filename..." 
+                       onkeyup="filterJobs()">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Auto-refresh</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
+                    <label class="form-check-label" for="autoRefresh">
+                        Enable (every 5 seconds)
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Jobs Table -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Job List</h5>
+    </div>
+    <div class="card-body">
+        <div id="jobsTableContainer">
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading jobs...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Job Details Modal -->
+<div class="modal fade" id="jobDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-info-circle"></i>
+                    Job Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="jobDetailsContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="cancelJobBtn" style="display: none;">
+                    <i class="bi bi-x-circle"></i> Cancel Job
+                </button>
+                <button type="button" class="btn btn-primary" id="downloadJobResults" style="display: none;">
+                    <i class="bi bi-download"></i> Download Results
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Details Modal -->
+<div class="modal fade" id="errorDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Error Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="errorDetailsContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let allJobs = [];
+    let autoRefreshInterval = null;
+    const jobDetailsModal = new bootstrap.Modal(document.getElementById('jobDetailsModal'));
+    const errorDetailsModal = new bootstrap.Modal(document.getElementById('errorDetailsModal'));
+    
+    // Initialize
+    loadJobs();
+    setupAutoRefresh();
+    
+    // Check if there's a job ID in the URL hash
+    if (window.location.hash) {
+        const jobId = window.location.hash.substring(1);
+        setTimeout(() => showJobDetails(jobId), 1000);
+    }
+    
+    async function loadJobs() {
+        try {
+            const jobs = await apiCall('/api/jobs?limit=100');
+            allJobs = jobs;
+            updateStatistics(jobs);
+            displayJobs(jobs);
+        } catch (error) {
+            showAlert(`Failed to load jobs: ${error.message}`, 'danger');
+            document.getElementById('jobsTableContainer').innerHTML = `
+                <div class="text-center text-danger">
+                    <i class="bi bi-exclamation-triangle display-4"></i>
+                    <p class="mt-2">Failed to load jobs</p>
+                    <button class="btn btn-outline-primary" onclick="loadJobs()">Retry</button>
+                </div>
+            `;
+        }
+    }
+    
+    function updateStatistics(jobs) {
+        const stats = {
+            total: jobs.length,
+            pending: jobs.filter(j => j.status === 'pending').length,
+            running: jobs.filter(j => j.status === 'running').length,
+            completed: jobs.filter(j => j.status === 'completed').length,
+            failed: jobs.filter(j => j.status === 'failed').length,
+            cancelled: jobs.filter(j => j.status === 'cancelled').length
+        };
+        
+        document.getElementById('totalJobs').textContent = stats.total;
+        document.getElementById('runningJobs').textContent = stats.running;
+        document.getElementById('completedJobs').textContent = stats.completed;
+        document.getElementById('failedJobs').textContent = stats.failed;
+    }
+    
+    function displayJobs(jobs) {
+        const container = document.getElementById('jobsTableContainer');
+        
+        if (jobs.length === 0) {
+            container.innerHTML = `
+                <div class="text-center text-muted">
+                    <i class="bi bi-inbox display-4"></i>
+                    <p class="mt-2">No jobs found</p>
+                    <a href="/" class="btn btn-primary">Create First Job</a>
+                </div>
+            `;
+            return;
+        }
+        
+        const table = `
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Job ID</th>
+                            <th>Filename</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Processing Time</th>
+                            <th>Shape</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${jobs.map(job => `
+                            <tr>
+                                <td>
+                                    <code class="text-muted">${job.job_id.substring(0, 8)}...</code>
+                                </td>
+                                <td>
+                                    <i class="bi bi-file-earmark-text me-1"></i>
+                                    ${job.original_filename}
+                                </td>
+                                <td>${formatJobStatus(job.status)}</td>
+                                <td>
+                                    <small>${formatTimestamp(job.created_at)}</small>
+                                </td>
+                                <td>
+                                    ${job.processing_time ? 
+                                        `<small>${job.processing_time.toFixed(2)}s</small>` : 
+                                        '<small class="text-muted">-</small>'}
+                                </td>
+                                <td>
+                                    ${job.original_shape ? 
+                                        `<small>${job.original_shape[0]} × ${job.original_shape[1]}</small>` :
+                                        '<small class="text-muted">-</small>'}
+                                    ${job.cleaned_shape ? 
+                                        `<br><small class="text-success">→ ${job.cleaned_shape[0]} × ${job.cleaned_shape[1]}</small>` : 
+                                        ''}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" onclick="showJobDetails('${job.job_id}')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        ${job.status === 'failed' ? 
+                                            `<button class="btn btn-outline-danger" onclick="showErrorDetails('${job.job_id}')">
+                                                <i class="bi bi-exclamation-triangle"></i>
+                                            </button>` : ''}
+                                        ${job.status === 'pending' || job.status === 'running' ? 
+                                            `<button class="btn btn-outline-warning" onclick="cancelJob('${job.job_id}')">
+                                                <i class="bi bi-x"></i>
+                                            </button>` : ''}
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+        
+        container.innerHTML = table;
+    }
+    
+    function filterJobs() {
+        const statusFilter = document.getElementById('statusFilter').value;
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        
+        let filteredJobs = allJobs;
+        
+        if (statusFilter) {
+            filteredJobs = filteredJobs.filter(job => job.status === statusFilter);
+        }
+        
+        if (searchInput) {
+            filteredJobs = filteredJobs.filter(job => 
+                job.original_filename.toLowerCase().includes(searchInput) ||
+                job.job_id.toLowerCase().includes(searchInput)
+            );
+        }
+        
+        displayJobs(filteredJobs);
+    }
+    
+    async function showJobDetails(jobId) {
+        try {
+            const job = await apiCall(`/api/jobs/${jobId}`);
+            const content = document.getElementById('jobDetailsContent');
+            
+            content.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Job Information</h6>
+                        <table class="table table-sm">
+                            <tr><td><strong>Job ID:</strong></td><td><code>${job.job_id}</code></td></tr>
+                            <tr><td><strong>Filename:</strong></td><td>${job.original_filename}</td></tr>
+                            <tr><td><strong>Status:</strong></td><td>${formatJobStatus(job.status)}</td></tr>
+                            <tr><td><strong>Created:</strong></td><td>${formatTimestamp(job.created_at)}</td></tr>
+                            <tr><td><strong>Started:</strong></td><td>${formatTimestamp(job.started_at)}</td></tr>
+                            <tr><td><strong>Completed:</strong></td><td>${formatTimestamp(job.completed_at)}</td></tr>
+                            <tr><td><strong>Processing Time:</strong></td><td>${job.processing_time ? job.processing_time.toFixed(2) + 's' : '-'}</td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Data Information</h6>
+                        <table class="table table-sm">
+                            <tr><td><strong>Original Shape:</strong></td><td>${job.original_shape ? `${job.original_shape[0]} rows × ${job.original_shape[1]} columns` : '-'}</td></tr>
+                            <tr><td><strong>Cleaned Shape:</strong></td><td>${job.cleaned_shape ? `${job.cleaned_shape[0]} rows × ${job.cleaned_shape[1]} columns` : '-'}</td></tr>
+                            <tr><td><strong>Rows Removed:</strong></td><td>${job.original_shape && job.cleaned_shape ? job.original_shape[0] - job.cleaned_shape[0] : '-'}</td></tr>
+                            <tr><td><strong>Columns Removed:</strong></td><td>${job.original_shape && job.cleaned_shape ? job.original_shape[1] - job.cleaned_shape[1] : '-'}</td></tr>
+                        </table>
+                    </div>
+                </div>
+                
+                ${job.config ? `
+                <div class="mt-4">
+                    <h6>Configuration</h6>
+                    <pre class="bg-light p-3 rounded" style="max-height: 200px; overflow-y: auto;">${JSON.stringify(job.config, null, 2)}</pre>
+                </div>
+                ` : ''}
+                
+                ${job.report_summary ? `
+                <div class="mt-4">
+                    <h6>Cleaning Report</h6>
+                    <pre class="bg-light p-3 rounded" style="max-height: 200px; overflow-y: auto;">${JSON.stringify(job.report_summary, null, 2)}</pre>
+                </div>
+                ` : ''}
+                
+                ${job.preview_data && job.preview_data.length > 0 ? `
+                <div class="mt-4">
+                    <h6>Data Preview</h6>
+                    <div style="max-height: 300px; overflow: auto;">
+                        ${generatePreviewTable(job.preview_data)}
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${job.column_info ? `
+                <div class="mt-4">
+                    <h6>Column Information</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Original Columns (${job.column_info.original_columns.length}):</strong>
+                            <div class="mt-2" style="max-height: 150px; overflow-y: auto;">
+                                ${job.column_info.original_columns.map(col => `<span class="badge bg-secondary me-1 mb-1">${col}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Final Columns (${job.column_info.cleaned_columns.length}):</strong>
+                            <div class="mt-2" style="max-height: 150px; overflow-y: auto;">
+                                ${job.column_info.cleaned_columns.map(col => `<span class="badge bg-primary me-1 mb-1">${col}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+            `;
+            
+            // Show/hide action buttons
+            const cancelBtn = document.getElementById('cancelJobBtn');
+            const downloadBtn = document.getElementById('downloadJobResults');
+            
+            if (job.status === 'pending' || job.status === 'running') {
+                cancelBtn.style.display = 'inline-block';
+                cancelBtn.onclick = () => cancelJob(job.job_id);
+            } else {
+                cancelBtn.style.display = 'none';
+            }
+            
+            if (job.status === 'completed') {
+                downloadBtn.style.display = 'inline-block';
+                // TODO: Implement download functionality
+                downloadBtn.onclick = () => showAlert('Download functionality not yet implemented', 'info');
+            } else {
+                downloadBtn.style.display = 'none';
+            }
+            
+            jobDetailsModal.show();
+            
+        } catch (error) {
+            showAlert(`Failed to load job details: ${error.message}`, 'danger');
+        }
+    }
+    
+    async function showErrorDetails(jobId) {
+        try {
+            const job = await apiCall(`/api/jobs/${jobId}`);
+            const content = document.getElementById('errorDetailsContent');
+            
+            content.innerHTML = `
+                <div class="alert alert-danger">
+                    <h6><i class="bi bi-exclamation-triangle"></i> Job Failed</h6>
+                    <p><strong>Job ID:</strong> <code>${job.job_id}</code></p>
+                    <p><strong>Filename:</strong> ${job.original_filename}</p>
+                    <p><strong>Failed at:</strong> ${formatTimestamp(job.completed_at)}</p>
+                </div>
+                
+                <h6>Error Message</h6>
+                <pre class="bg-light p-3 rounded border">${job.error_message || 'No error message available'}</pre>
+                
+                ${job.config ? `
+                <div class="mt-4">
+                    <h6>Configuration Used</h6>
+                    <pre class="bg-light p-3 rounded">${JSON.stringify(job.config, null, 2)}</pre>
+                </div>
+                ` : ''}
+            `;
+            
+            errorDetailsModal.show();
+            
+        } catch (error) {
+            showAlert(`Failed to load error details: ${error.message}`, 'danger');
+        }
+    }
+    
+    async function cancelJob(jobId) {
+        if (!confirm('Are you sure you want to cancel this job?')) {
+            return;
+        }
+        
+        try {
+            await apiCall(`/api/jobs/${jobId}`, { method: 'DELETE' });
+            showAlert('Job cancelled successfully', 'success');
+            loadJobs();
+            jobDetailsModal.hide();
+        } catch (error) {
+            showAlert(`Failed to cancel job: ${error.message}`, 'danger');
+        }
+    }
+    
+    function generatePreviewTable(data) {
+        if (!data || data.length === 0) {
+            return '<p class="text-muted">No data to preview</p>';
+        }
+        
+        const columns = Object.keys(data[0]);
+        
+        let html = '<table class="table table-sm table-striped"><thead><tr>';
+        columns.forEach(col => {
+            html += `<th>${col}</th>`;
+        });
+        html += '</tr></thead><tbody>';
+        
+        data.forEach(row => {
+            html += '<tr>';
+            columns.forEach(col => {
+                const value = row[col];
+                html += `<td>${value !== null && value !== undefined ? value : '<span class="text-muted">null</span>'}</td>`;
+            });
+            html += '</tr>';
+        });
+        
+        html += '</tbody></table>';
+        return html;
+    }
+    
+    function setupAutoRefresh() {
+        const checkbox = document.getElementById('autoRefresh');
+        
+        function toggleAutoRefresh() {
+            if (checkbox.checked) {
+                autoRefreshInterval = setInterval(loadJobs, 5000);
+            } else {
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                    autoRefreshInterval = null;
+                }
+            }
+        }
+        
+        checkbox.addEventListener('change', toggleAutoRefresh);
+        toggleAutoRefresh(); // Initial setup
+    }
+    
+    // Global functions
+    window.refreshJobs = loadJobs;
+    window.filterJobs = filterJobs;
+    window.showJobDetails = showJobDetails;
+    window.showErrorDetails = showErrorDetails;
+    window.cancelJob = cancelJob;
+});
+</script>
+{% endblock %}
