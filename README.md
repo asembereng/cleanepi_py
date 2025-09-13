@@ -360,18 +360,114 @@ async def process_large_dataset():
 result = asyncio.run(process_large_dataset())
 ```
 
+## Command-Line Interface
+
+The package includes a full-featured CLI for batch processing and automation:
+
+### Basic Usage
+```bash
+# Clean a CSV file with basic operations
+cleanepi input.csv --standardize-columns --replace-missing --remove-duplicates
+
+# Specify output file and custom missing value patterns  
+cleanepi input.csv -o cleaned.csv --na-strings "unknown,missing,-99"
+
+# Remove constant columns and preview results
+cleanepi input.csv --remove-constants --preview 10
+```
+
+### Advanced Features
+```bash
+# Date standardization with validation
+cleanepi input.csv --standardize-dates --date-timeframe "1900-01-01,2024-12-31"
+
+# Subject ID validation with patterns
+cleanepi input.csv --validate-subject-ids --subject-id-prefix "P" --subject-id-length 4
+
+# Numeric conversion with language support
+cleanepi input.csv --convert-numeric --numeric-language en --numeric-columns "age,income"
+
+# Dictionary-based cleaning
+cleanepi input.csv --dictionary-file mappings.json
+```
+
+### Configuration Files
+```bash
+# Use JSON configuration for complex workflows
+cleanepi input.csv --config cleaning_config.json --report report.json
+
+# Generate configuration template
+cleanepi --help > config_template.txt
+```
+
+**Example configuration file (cleaning_config.json):**
+```json
+{
+  "standardize_column_names": true,
+  "replace_missing_values": {
+    "na_strings": ["-99", "unknown", "missing"],
+    "custom_na_by_column": {
+      "age": ["age unknown"],
+      "test_result": ["pending", "cancelled"]
+    }
+  },
+  "remove_duplicates": {
+    "keep": "first"
+  },
+  "standardize_dates": {
+    "timeframe": ["1900-01-01", "2024-12-31"],
+    "error_tolerance": 0.1
+  }
+}
+```
+
 ## Web Application Integration
 
-The package is designed to integrate seamlessly with web frameworks:
+The package provides a production-ready REST API:
 
+### Quick Start
 ```python
-from fastapi import FastAPI, UploadFile
-from cleanepi.web import create_cleaning_endpoint
+from cleanepi.web.api import create_app
+import uvicorn
 
-app = FastAPI()
+# Create FastAPI app
+app = create_app()
 
-# Add data cleaning endpoint
-app.include_router(create_cleaning_endpoint(), prefix="/api/v1")
+# Run server
+uvicorn.run(app, host="0.0.0.0", port=8000)
+```
+
+### API Endpoints
+```bash
+# Check API health
+curl -X GET "http://localhost:8000/health"
+# Response: {"status": "healthy", "version": "0.1.0"}
+
+# Get default configuration
+curl -X GET "http://localhost:8000/config/default"
+
+# Clean data file
+curl -X POST "http://localhost:8000/clean" \
+     -F "file=@data.csv" \
+     -F "config_json={\"standardize_column_names\": true}"
+
+# Async processing (for large files)
+curl -X POST "http://localhost:8000/clean/async" \
+     -F "file=@large_data.csv" \
+     -F "config_json={\"remove_duplicates\": true}"
+```
+
+### Integration with Web Frameworks
+```python
+from fastapi import FastAPI
+from cleanepi.web.api import create_app
+
+# Add to existing FastAPI app
+main_app = FastAPI()
+cleaning_app = create_app()
+
+# Mount as sub-application
+main_app.mount("/api/cleaning", cleaning_app)
 ```
 
 ## Security Features
