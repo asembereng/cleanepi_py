@@ -9,21 +9,22 @@ __version__ = "0.1.0"
 __author__ = "Karim Mané, Abdoelnaser Degoot"
 __email__ = "karim.mane@lshtm.ac.uk"
 
-# Core functionality imports
-from .core.clean_data import clean_data
-from .core.config import CleaningConfig, DateConfig, SubjectIDConfig
-from .core.report import CleaningReport
+from .cleaning.convert_numeric import convert_to_numeric
+from .cleaning.date_sequence import check_date_sequence
+from .cleaning.dictionary_cleaning import clean_using_dictionary
+from .cleaning.remove_constants import remove_constants
+from .cleaning.remove_duplicates import remove_duplicates
+from .cleaning.replace_missing import replace_missing_values
 
 # Individual cleaning functions
 from .cleaning.standardize_columns import standardize_column_names
 from .cleaning.standardize_dates import standardize_dates
-from .cleaning.remove_duplicates import remove_duplicates
-from .cleaning.remove_constants import remove_constants
-from .cleaning.replace_missing import replace_missing_values
-from .cleaning.convert_numeric import convert_to_numeric
-from .cleaning.dictionary_cleaning import clean_using_dictionary
 from .cleaning.validate_subject_ids import check_subject_ids
-from .cleaning.date_sequence import check_date_sequence
+
+# Core functionality imports
+from .core.clean_data import clean_data
+from .core.config import CleaningConfig, DateConfig, SubjectIDConfig
+from .core.report import CleaningReport
 
 # Utility functions
 from .utils.data_scanning import scan_data
@@ -33,7 +34,7 @@ __all__ = [
     # Core
     "clean_data",
     "CleaningConfig",
-    "DateConfig", 
+    "DateConfig",
     "SubjectIDConfig",
     "CleaningReport",
     # Cleaning functions
