@@ -122,7 +122,7 @@ class TestRemoveConstants:
         """Test constant detection with NaN values."""
         df = pd.DataFrame({
             'constant_with_nan': ['same', 'same', 'same', np.nan, np.nan],
-            'mostly_nan': [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, 'value', 'value'],
+            'mostly_nan': [np.nan, np.nan, np.nan, np.nan, 'value'],
             'all_nan': [np.nan, np.nan, np.nan, np.nan, np.nan],
             'variable': [1, 2, 3, 4, 5]
         })

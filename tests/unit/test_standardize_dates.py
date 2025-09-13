@@ -223,7 +223,7 @@ def sample_date_data():
     """Sample data for testing."""
     return pd.DataFrame({
         'mixed_dates': ['2023-01-15', '15/02/2023', '2023/03/20', 'invalid'],
-        'iso_dates': ['2023-01-15', '2023-02-20', '2023-03-25'],
+        'iso_dates': ['2023-01-15', '2023-02-20', '2023-03-25', 'invalid_date'],
         'text_col': ['text1', 'text2', 'text3', 'text4'],
         'numeric_col': [1, 2, 3, 4]
     })

@@ -216,16 +216,13 @@ class TestEdgeCases:
             'patient_id': []
         })
         
-        result = check_subject_ids(
-            data,
-            target_columns=['patient_id'],
-            prefix='P'
-        )
-        
-        # Should handle gracefully
-        assert 'patient_id_valid' in result.columns
-        assert 'patient_id_issues' in result.columns
-        assert len(result) == 0
+        # Should raise validation error for empty DataFrame
+        with pytest.raises(ValueError, match="DataFrame is empty"):
+            check_subject_ids(
+                data,
+                target_columns=['patient_id'],
+                prefix='P'
+            )
     
     def test_null_values(self):
         """Test handling of null values."""

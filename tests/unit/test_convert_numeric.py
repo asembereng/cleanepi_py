@@ -59,7 +59,7 @@ class TestBasicNumericConversion:
         
         assert pd.api.types.is_numeric_dtype(result['mixed'])
         assert result['mixed'].iloc[0] == 1.0
-        assert pd.isna(result['mixed'].iloc[1])  # 'two' should convert if word recognition works
+        assert result['mixed'].iloc[1] == 2.0  # 'two' converts to 2.0 with word recognition
         assert result['mixed'].iloc[2] == 3.5
         assert pd.isna(result['mixed'].iloc[3])  # 'invalid' should be NaN
         assert result['mixed'].iloc[4] == 10.0
@@ -346,6 +346,6 @@ def test_value_conversion_function():
     for input_val, expected in test_cases:
         result = _convert_value_to_numeric(input_val, 'en')
         if result is not None:  # Some conversions might not work due to simplified implementation
-            assert isinstance(result, (int, float))
+            assert isinstance(result, (int, float, np.number))
             # For successful conversions, check if result is reasonable
             assert result >= 0  # Most values should be positive

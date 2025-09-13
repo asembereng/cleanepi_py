@@ -70,6 +70,7 @@ def _is_date_like(value: str) -> bool:
         r'\d{4}[-/]\d{1,2}[-/]\d{1,2}',  # YYYY-MM-DD or YYYY/MM/DD
         r'\d{1,2}[-/]\d{1,2}[-/]\d{4}',  # MM-DD-YYYY or MM/DD/YYYY or DD-MM-YYYY
         r'\d{1,2}[-/]\d{1,2}[-/]\d{2}',  # MM-DD-YY or DD-MM-YY
+        r'\d{8}',  # YYYYMMDD
         r'\d{1,2}\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)',  # DD Mon
         r'(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}',  # Mon DD
     ]

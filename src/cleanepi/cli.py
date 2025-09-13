@@ -15,7 +15,10 @@ import pandas as pd
 from loguru import logger
 
 from cleanepi import clean_data, CleaningConfig
-from cleanepi.core.config import MissingValueConfig, DuplicateConfig, ConstantConfig
+from cleanepi.core.config import (
+    MissingValueConfig, DuplicateConfig, ConstantConfig,
+    DateConfig, SubjectIDConfig, NumericConfig
+)
 from cleanepi.utils.validation import validate_file_safety, detect_encoding
 
 
@@ -85,11 +88,64 @@ def create_config_from_args(args) -> CleaningConfig:
     if args.remove_constants:
         constant_config = ConstantConfig(cutoff=args.constant_cutoff)
     
+    # Date standardization config
+    date_config = None
+    if args.standardize_dates:
+        target_columns = args.date_columns.split(',') if args.date_columns else None
+        timeframe = None
+        if args.date_timeframe:
+            timeframe_parts = args.date_timeframe.split(',')
+            if len(timeframe_parts) == 2:
+                timeframe = (timeframe_parts[0].strip(), timeframe_parts[1].strip())
+        
+        date_config = DateConfig(
+            target_columns=target_columns,
+            timeframe=timeframe,
+            error_tolerance=args.date_error_tolerance
+        )
+    
+    # Subject ID validation config
+    subject_id_config = None
+    if args.validate_subject_ids:
+        target_columns = args.subject_id_columns.split(',') if args.subject_id_columns else []
+        subject_id_config = SubjectIDConfig(
+            target_columns=target_columns,
+            prefix=args.subject_id_prefix,
+            suffix=args.subject_id_suffix,
+            nchar=args.subject_id_length
+        )
+    
+    # Numeric conversion config
+    numeric_config = None
+    if args.convert_numeric:
+        target_columns = args.numeric_columns.split(',') if args.numeric_columns else []
+        numeric_config = NumericConfig(
+            target_columns=target_columns,
+            lang=args.numeric_language,
+            errors=args.numeric_errors
+        )
+    
+    # Dictionary cleaning
+    dictionary = None
+    if args.dictionary_file:
+        with open(args.dictionary_file) as f:
+            dictionary = json.load(f)
+    
+    # Date sequence validation
+    date_sequence_columns = None
+    if args.check_date_sequence:
+        date_sequence_columns = args.date_sequence_columns.split(',') if args.date_sequence_columns else None
+    
     return CleaningConfig(
         standardize_column_names=args.standardize_columns,
         replace_missing_values=missing_config,
         remove_duplicates=duplicate_config,
         remove_constants=constant_config,
+        standardize_dates=date_config,
+        standardize_subject_ids=subject_id_config,
+        to_numeric=numeric_config,
+        dictionary=dictionary,
+        check_date_sequence=date_sequence_columns,
         verbose=args.verbose
     )
 
@@ -142,6 +198,87 @@ def main():
         type=float,
         default=1.0,
         help="Proportion threshold for constant columns (0.0-1.0)"
+    )
+    
+    # Advanced cleaning options
+    parser.add_argument(
+        "--standardize-dates",
+        action="store_true",
+        help="Standardize date columns with intelligent parsing"
+    )
+    parser.add_argument(
+        "--date-columns",
+        help="Comma-separated list of date columns to standardize (auto-detect if not specified)"
+    )
+    parser.add_argument(
+        "--date-timeframe",
+        help="Valid date range as 'start_date,end_date' in YYYY-MM-DD format"
+    )
+    parser.add_argument(
+        "--date-error-tolerance",
+        type=float,
+        default=0.4,
+        help="Proportion of unparseable dates to tolerate (0.0-1.0)"
+    )
+    
+    parser.add_argument(
+        "--validate-subject-ids",
+        action="store_true",
+        help="Validate subject ID columns"
+    )
+    parser.add_argument(
+        "--subject-id-columns",
+        help="Comma-separated list of subject ID columns to validate"
+    )
+    parser.add_argument(
+        "--subject-id-prefix",
+        help="Expected prefix for subject IDs"
+    )
+    parser.add_argument(
+        "--subject-id-suffix", 
+        help="Expected suffix for subject IDs"
+    )
+    parser.add_argument(
+        "--subject-id-length",
+        type=int,
+        help="Expected total character length for subject IDs"
+    )
+    
+    parser.add_argument(
+        "--convert-numeric",
+        action="store_true",
+        help="Convert text columns to numeric with intelligent parsing"
+    )
+    parser.add_argument(
+        "--numeric-columns",
+        help="Comma-separated list of columns to convert to numeric"
+    )
+    parser.add_argument(
+        "--numeric-language",
+        default="en",
+        choices=["en", "es", "fr"],
+        help="Language for number word conversion (e.g., 'one' -> 1)"
+    )
+    parser.add_argument(
+        "--numeric-errors",
+        default="coerce",
+        choices=["raise", "coerce", "ignore"],
+        help="How to handle conversion errors"
+    )
+    
+    parser.add_argument(
+        "--dictionary-file",
+        help="JSON file containing dictionary mappings for value replacement"
+    )
+    
+    parser.add_argument(
+        "--check-date-sequence",
+        action="store_true",
+        help="Check date sequence validity and logical ordering"
+    )
+    parser.add_argument(
+        "--date-sequence-columns",
+        help="Comma-separated list of date columns to check in chronological order"
     )
     
     # Output options
