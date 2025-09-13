@@ -38,6 +38,13 @@ from .utils.data_scanning import scan_data
 from .utils.validation import validate_dataframe, get_memory_usage
 from .utils.performance import PerformanceMonitor, performance_monitor
 
+# Performance and scalability features (optional imports)
+try:
+    from . import performance
+    _PERFORMANCE_AVAILABLE = True
+except ImportError:
+    _PERFORMANCE_AVAILABLE = False
+
 __all__ = [
     # Core
     "clean_data",
@@ -68,3 +75,7 @@ __all__ = [
     "PerformanceMonitor",
     "performance_monitor",
 ]
+
+# Add performance module to __all__ if available
+if _PERFORMANCE_AVAILABLE:
+    __all__.append("performance")
