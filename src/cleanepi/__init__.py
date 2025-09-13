@@ -35,7 +35,8 @@ from .cleaning.date_sequence import (
 
 # Utility functions
 from .utils.data_scanning import scan_data
-from .utils.validation import validate_dataframe
+from .utils.validation import validate_dataframe, get_memory_usage
+from .utils.performance import PerformanceMonitor, performance_monitor
 
 __all__ = [
     # Core
@@ -63,4 +64,7 @@ __all__ = [
     # Utils
     "scan_data",
     "validate_dataframe",
+    "get_memory_usage",
+    "PerformanceMonitor",
+    "performance_monitor",
 ]
