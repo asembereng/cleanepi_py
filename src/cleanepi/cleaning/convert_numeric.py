@@ -274,6 +274,14 @@ def _convert_value_to_numeric(value: Any, lang: str) -> Union[float, None]:
     except:
         pass
     
+    # Try percentage conversion early (before cleaning removes % symbol)
+    try:
+        percentage = _parse_percentage(str_value)
+        if percentage is not None:
+            return percentage
+    except:
+        pass
+    
     # Clean the string and try various parsing methods
     cleaned_value = _clean_numeric_string(str_value)
     
@@ -288,14 +296,6 @@ def _convert_value_to_numeric(value: Any, lang: str) -> Union[float, None]:
         word_number = _words_to_number(str_value, lang)
         if word_number is not None:
             return float(word_number)
-    except:
-        pass
-    
-    # Try percentage conversion
-    try:
-        percentage = _parse_percentage(str_value)
-        if percentage is not None:
-            return percentage
     except:
         pass
     
@@ -336,7 +336,9 @@ def _clean_numeric_string(value: str) -> str:
     # Remove common units
     units = ['kg', 'lbs', 'cm', 'ft', 'in', 'm', 'km', 'mi']
     for unit in units:
+        # Try both word boundary and direct match patterns
         cleaned = re.sub(rf'\b{unit}\b', '', cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(rf'{unit}(?=\s|$)', '', cleaned, flags=re.IGNORECASE)
     
     # Remove percentage symbols (but keep the number)
     cleaned = cleaned.replace('%', '')
@@ -417,7 +419,7 @@ def _parse_percentage(text: str) -> Optional[float]:
     
     # Check for percentage symbol
     if '%' in text_lower or 'percent' in text_lower:
-        # Extract numeric part
+        # First try to extract numeric part
         numeric_match = re.search(r'(\d+(?:\.\d+)?)', text_lower)
         if numeric_match:
             try:
@@ -425,6 +427,11 @@ def _parse_percentage(text: str) -> Optional[float]:
                 return percentage_value / 100.0  # Convert to decimal
             except ValueError:
                 pass
+        else:
+            # Try to convert word numbers
+            word_number = _words_to_number(text_lower.replace('percent', '').strip(), 'en')
+            if word_number is not None:
+                return word_number / 100.0
     
     return None
 

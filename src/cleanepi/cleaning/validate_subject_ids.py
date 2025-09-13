@@ -104,10 +104,13 @@ def check_subject_ids(
                 valid_series.loc[idx] = validation_results[id_val]['valid']
                 issues_series.loc[idx] = ', '.join(validation_results[id_val]['issues'])
         
-        # Set null values as invalid
+        # Set null values and empty strings as invalid
         null_mask = result[col].isna()
-        valid_series.loc[null_mask] = False
+        empty_mask = result[col].astype(str).str.strip() == ''
+        invalid_mask = null_mask | empty_mask
+        valid_series.loc[invalid_mask] = False
         issues_series.loc[null_mask] = 'missing_value'
+        issues_series.loc[empty_mask & ~null_mask] = 'empty_string'
         
         result[valid_col] = valid_series
         result[issues_col] = issues_series
