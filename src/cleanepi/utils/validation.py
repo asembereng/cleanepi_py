@@ -387,6 +387,11 @@ def sanitize_input_string(input_str: str, max_length: int = 1000) -> str:
         sanitized = re.sub(pattern, '', sanitized, flags=re.IGNORECASE | re.DOTALL)
     
     return sanitized.strip()
+
+
+def validate_config(config) -> None:
+    """
+    Validate cleaning configuration.
     
     Parameters
     ----------
