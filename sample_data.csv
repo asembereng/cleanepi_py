@@ -1,0 +1,5 @@
+ID,Name,Age,Status
+1,John,-99,active
+2,Jane,25,active
+1,John,-99,active
+3,Bob,unknown,inactive
