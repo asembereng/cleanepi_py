@@ -117,30 +117,80 @@ cleaned_data, report = clean_data(data, config)
 
 ## Installation
 
+**Note**: This package is not yet published on PyPI. To use it, you need to install it from source.
+
+### Prerequisites
+- Python 3.9 or higher
+- Git
+
+### Install from Source
+
+#### Linux/macOS
 ```bash
-# Basic installation (CLI and Python API only)
-pip install cleanepi-python
+# Clone the repository
+git clone https://github.com/epiverse-trace/cleanepi.git
+cd cleanepi
 
-# Recommended: With web application support
-pip install cleanepi-python[web]
+# Install in development mode with all dependencies
+pip install -e ".[dev]"
 
-# With performance enhancements for large datasets
-pip install cleanepi-python[performance]
+# For web application support, also install web dependencies
+pip install openpyxl pyarrow fastapi uvicorn httpx python-multipart
 
-# Complete installation (web + performance)
-pip install cleanepi-python[web,performance]
-
-# Development installation
-pip install cleanepi-python[dev]
+# Run the CLI tool
+cleanepi --help
 ```
 
-### Web Application Dependencies
-For the full web application experience, install with web support:
-```bash
-pip install cleanepi-python[web]
+#### Windows
+```cmd
+REM Clone the repository
+git clone https://github.com/epiverse-trace/cleanepi.git
+cd cleanepi
 
-# Or manually install web dependencies:
-pip install fastapi uvicorn httpx python-multipart
+REM Install in development mode with all dependencies
+pip install -e ".[dev]"
+
+REM For web application support, also install web dependencies
+pip install openpyxl pyarrow fastapi uvicorn httpx python-multipart
+
+REM Run the CLI tool
+cleanepi --help
+```
+
+### Alternative: Run Python Module Directly
+
+If you prefer not to install the package, you can run it directly as a Python module:
+
+#### Linux/macOS
+```bash
+# Clone the repository
+git clone https://github.com/epiverse-trace/cleanepi.git
+cd cleanepi
+
+# Install dependencies only
+pip install -r requirements.txt
+
+# Run as Python module
+python -m cleanepi.cli --help
+
+# Or run Python scripts directly
+python -c "from cleanepi import clean_data, CleaningConfig; print('Import successful')"
+```
+
+#### Windows
+```cmd
+REM Clone the repository
+git clone https://github.com/epiverse-trace/cleanepi.git
+cd cleanepi
+
+REM Install dependencies only
+pip install -r requirements.txt
+
+REM Run as Python module
+python -m cleanepi.cli --help
+
+REM Or run Python scripts directly
+python -c "from cleanepi import clean_data, CleaningConfig; print('Import successful')"
 ```
 
 ## Quick Start
@@ -449,12 +499,13 @@ The package includes a **comprehensive web application** for interactive data cl
 
 ### Quick Start
 
-#### Installation with Web Dependencies
+#### Prerequisites for Web Application
+After installing the package from source (see Installation section above), ensure you have the web dependencies:
 ```bash
-# Install with web application support
-pip install cleanepi-python[web]
+# Install web dependencies (Linux/macOS)
+pip install fastapi uvicorn httpx python-multipart
 
-# Or install web dependencies manually
+# Windows
 pip install fastapi uvicorn httpx python-multipart
 ```
 
