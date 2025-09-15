@@ -9,6 +9,8 @@ import uuid
 import asyncio
 import time
 from typing import Dict, List, Optional, Any, Union
+import tempfile
+import os
 from datetime import datetime, timedelta
 from enum import Enum
 from dataclasses import dataclass, asdict
@@ -47,6 +49,8 @@ class JobResult:
     processing_time: Optional[float] = None
     preview_data: Optional[List[Dict]] = None
     column_info: Optional[Dict[str, Any]] = None
+    # path to the originally uploaded file persisted for this job (used for download/re-run)
+    source_path: Optional[str] = None
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
@@ -137,7 +141,10 @@ class JobManager:
             self._cleanup_task.cancel()
         
         # Wait for tasks to finish
-        await asyncio.gather(*self._worker_tasks, self._cleanup_task, return_exceptions=True)
+        tasks: List[asyncio.Task] = list(self._worker_tasks)
+        if self._cleanup_task is not None:
+            tasks.append(self._cleanup_task)
+        await asyncio.gather(*tasks, return_exceptions=True)
         
         # Cancel any running jobs
         for job_id, task in self.running_jobs.items():
@@ -149,7 +156,10 @@ class JobManager:
         self, 
         data: pd.DataFrame, 
         config: CleaningConfig,
-        filename: str = "uploaded_file"
+        filename: str = "uploaded_file",
+        original_file_bytes: Optional[bytes] = None,
+        original_file_ext: Optional[str] = None,
+        temp_dir: Optional[str] = None,
     ) -> str:
         """
         Submit a new cleaning job.
@@ -171,13 +181,23 @@ class JobManager:
         job_id = str(uuid.uuid4())
         
         # Create job result record
+        # Optionally persist original file to a temp path for later download/reprocessing
+        source_path = None
+        if original_file_bytes is not None and original_file_ext is not None:
+            tmp_dir = temp_dir or tempfile.gettempdir()
+            os.makedirs(tmp_dir, exist_ok=True)
+            with tempfile.NamedTemporaryFile(delete=False, suffix=original_file_ext, dir=tmp_dir) as f:
+                f.write(original_file_bytes)
+                source_path = f.name
+
         job_result = JobResult(
             job_id=job_id,
             status=JobStatus.PENDING,
             created_at=datetime.now(),
             original_filename=filename,
             original_shape=data.shape,
-            config=config.dict()
+            config=config.dict(),
+            source_path=source_path,
         )
         
         self.jobs[job_id] = job_result
@@ -350,6 +370,13 @@ class JobManager:
                         expired_jobs.append(job_id)
                 
                 for job_id in expired_jobs:
+                    job = self.jobs[job_id]
+                    # Attempt to remove persisted source file if present
+                    try:
+                        if job.source_path and os.path.exists(job.source_path):
+                            os.unlink(job.source_path)
+                    except Exception:
+                        pass
                     del self.jobs[job_id]
                     logger.info(f"Cleaned up expired job {job_id}")
                 

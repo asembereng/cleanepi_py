@@ -231,6 +231,83 @@ unknown</textarea>
                 </div>
             </div>
 
+            <!-- Numeric Conversion -->
+            <div class="config-section">
+                <h5><i class="bi bi-123"></i> Numeric Conversion</h5>
+                <p class="text-muted">Convert text columns to numeric values with intelligent parsing</p>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="convertNumeric">
+                    <label class="form-check-label" for="convertNumeric">
+                        <strong>Enable numeric conversion</strong>
+                    </label>
+                </div>
+
+                <div id="numericOptions" class="ms-4" style="display: none;">
+                    <div class="mb-3">
+                        <label for="numericColumns" class="form-label">Numeric columns</label>
+                        <input type="text" class="form-control" id="numericColumns" placeholder="age, weight, height">
+                        <div class="form-text">Comma-separated list of columns to convert.</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="numericLanguage" class="form-label">Language</label>
+                            <select class="form-select" id="numericLanguage">
+                                <option value="en" selected>English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="numericErrors" class="form-label">On errors</label>
+                            <select class="form-select" id="numericErrors">
+                                <option value="coerce" selected>Coerce to NaN</option>
+                                <option value="ignore">Ignore</option>
+                                <option value="raise">Raise error</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dictionary Cleaning -->
+            <div class="config-section">
+                <h5><i class="bi bi-journal-text"></i> Dictionary Cleaning</h5>
+                <p class="text-muted">Replace values using a mapping per column</p>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="dictionaryCleaning">
+                    <label class="form-check-label" for="dictionaryCleaning">
+                        <strong>Enable dictionary-based cleaning</strong>
+                    </label>
+                </div>
+
+                <div id="dictionaryOptions" class="ms-4" style="display: none;">
+                    <label for="dictionaryJson" class="form-label">Dictionary JSON</label>
+                    <textarea class="form-control" id="dictionaryJson" rows="6" placeholder='{"columnA": {"old": "new"}, "columnB": {"yes": "1", "no": "0"}}'></textarea>
+                    <div class="form-text">Provide a JSON object mapping columns to value mappings.</div>
+                </div>
+            </div>
+
+            <!-- Date Sequence Check -->
+            <div class="config-section">
+                <h5><i class="bi bi-sort-numeric-down"></i> Date Sequence Check</h5>
+                <p class="text-muted">Validate chronological ordering across date columns</p>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="checkDateSequence">
+                    <label class="form-check-label" for="checkDateSequence">
+                        <strong>Enable date sequence validation</strong>
+                    </label>
+                </div>
+
+                <div id="dateSequenceOptions" class="ms-4" style="display: none;">
+                    <label for="dateSequenceColumns" class="form-label">Ordered date columns</label>
+                    <input type="text" class="form-control" id="dateSequenceColumns" placeholder="admission_date, discharge_date">
+                    <div class="form-text">Comma-separated list in the expected chronological order.</div>
+                </div>
+            </div>
+
             <!-- Global Settings -->
             <div class="config-section">
                 <h5><i class="bi bi-sliders"></i> Global Settings</h5>
@@ -394,6 +471,18 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('subjectIdOptions').style.display = this.checked ? 'block' : 'none';
             updateConfigPreview();
         });
+        document.getElementById('convertNumeric').addEventListener('change', function() {
+            document.getElementById('numericOptions').style.display = this.checked ? 'block' : 'none';
+            updateConfigPreview();
+        });
+        document.getElementById('dictionaryCleaning').addEventListener('change', function() {
+            document.getElementById('dictionaryOptions').style.display = this.checked ? 'block' : 'none';
+            updateConfigPreview();
+        });
+        document.getElementById('checkDateSequence').addEventListener('change', function() {
+            document.getElementById('dateSequenceOptions').style.display = this.checked ? 'block' : 'none';
+            updateConfigPreview();
+        });
         
         // Range input listeners
         document.getElementById('constantCutoff').addEventListener('input', function() {
@@ -423,16 +512,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function buildConfiguration() {
         const config = {};
         
-        // Column standardization
+        // Column standardization (backend expects keys like style, remove_special_chars)
         if (document.getElementById('standardizeColumns').checked) {
             config.standardize_column_names = {
-                remove_spaces: document.getElementById('removeSpaces').checked,
-                to_lower_case: document.getElementById('toLowerCase').checked,
-                remove_special_chars: document.getElementById('removeSpecialChars').checked,
-                snake_case: document.getElementById('snakeCase').checked
+                style: document.getElementById('snakeCase').checked ? 'snake_case' : 'snake_case',
+                remove_special_chars: document.getElementById('removeSpecialChars').checked
             };
         } else {
-            config.standardize_column_names = false;
+            config.standardize_column_names = false; // serialized as false
         }
         
         // Missing values
@@ -451,6 +538,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 na_strings: naStrings.length > 0 ? naStrings : undefined,
                 target_columns: targetColumns.length > 0 ? targetColumns : undefined
             };
+        } else {
+            // Explicitly disable (defaults to enabled in backend)
+            config.replace_missing_values = null;
         }
         
         // Duplicates
@@ -464,6 +554,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 subset: subset.length > 0 ? subset : undefined,
                 keep: document.getElementById('duplicateKeep').value
             };
+        } else {
+            // Explicitly disable (defaults to enabled in backend)
+            config.remove_duplicates = null;
         }
         
         // Constants
@@ -477,6 +570,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 cutoff: parseFloat(document.getElementById('constantCutoff').value),
                 exclude_columns: excludeColumns.length > 0 ? excludeColumns : undefined
             };
+        } else {
+            // Explicitly disable (defaults to enabled in backend)
+            config.remove_constants = null;
         }
         
         // Date standardization
@@ -510,6 +606,52 @@ document.addEventListener('DOMContentLoaded', function() {
                     suffix: document.getElementById('idSuffix').value || undefined,
                     nchar: parseInt(document.getElementById('idLength').value) || undefined
                 };
+            }
+        }
+
+        // Numeric conversion
+        if (document.getElementById('convertNumeric').checked) {
+            const numericColumns = document.getElementById('numericColumns').value
+                .split(',')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+            if (numericColumns.length > 0) {
+                config.to_numeric = {
+                    target_columns: numericColumns,
+                    lang: document.getElementById('numericLanguage').value,
+                    errors: document.getElementById('numericErrors').value
+                };
+            }
+        }
+
+        // Dictionary cleaning
+        if (document.getElementById('dictionaryCleaning').checked) {
+            const dictText = document.getElementById('dictionaryJson').value.trim();
+            if (dictText) {
+                try {
+                    const parsed = JSON.parse(dictText);
+                    if (parsed && typeof parsed === 'object') {
+                        config.dictionary = parsed;
+                    }
+                } catch (e) {
+                    // Warn but don't block preview building
+                    if (typeof showAlert === 'function') {
+                        showAlert('Invalid dictionary JSON; it will be ignored until fixed.', 'warning');
+                    } else {
+                        console.warn('Invalid dictionary JSON');
+                    }
+                }
+            }
+        }
+
+        // Date sequence check
+        if (document.getElementById('checkDateSequence').checked) {
+            const seqCols = document.getElementById('dateSequenceColumns').value
+                .split(',')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+            if (seqCols.length > 0) {
+                config.check_date_sequence = seqCols;
             }
         }
         
@@ -655,16 +797,140 @@ document.addEventListener('DOMContentLoaded', function() {
     window.resetToDefaults = resetToDefaults;
     window.saveConfiguration = saveConfiguration;
     
-    // Load saved configuration if exists
+    // Load saved configuration if exists and apply to form
     const savedConfig = localStorage.getItem('cleanepi_config');
     if (savedConfig) {
         try {
-            const config = JSON.parse(savedConfig);
-            // TODO: Apply saved configuration to form
-            console.log('Saved configuration found:', config);
+            const cfg = JSON.parse(savedConfig);
+            applyConfigurationToForm(cfg);
+            updateConfigPreview();
         } catch (error) {
             console.error('Failed to load saved configuration:', error);
         }
+    }
+
+    function setCheckbox(id, value, optionsId) {
+        const el = document.getElementById(id);
+        if (typeof value === 'boolean') el.checked = value;
+        if (optionsId) document.getElementById(optionsId).style.display = el.checked ? 'block' : 'none';
+    }
+
+    function setText(id, value) {
+        if (value !== undefined && value !== null) {
+            document.getElementById(id).value = String(value);
+        }
+    }
+
+    function setSelect(id, value) {
+        if (value !== undefined && value !== null) {
+            document.getElementById(id).value = String(value);
+        }
+    }
+
+    function setRange(id, value, labelId, labelFormatter) {
+        if (typeof value === 'number') {
+            const el = document.getElementById(id);
+            el.value = value;
+            if (labelId && labelFormatter) document.getElementById(labelId).textContent = labelFormatter(value);
+        }
+    }
+
+    function applyConfigurationToForm(config) {
+        // Column standardization
+        if (config.hasOwnProperty('standardize_column_names')) {
+            if (config.standardize_column_names === false) {
+                setCheckbox('standardizeColumns', false, 'columnOptions');
+            } else if (typeof config.standardize_column_names === 'object') {
+                setCheckbox('standardizeColumns', true, 'columnOptions');
+                const style = config.standardize_column_names.style || 'snake_case';
+                document.getElementById('snakeCase').checked = (style === 'snake_case');
+                const rsc = config.standardize_column_names.remove_special_chars;
+                if (typeof rsc === 'boolean') document.getElementById('removeSpecialChars').checked = rsc;
+            } else {
+                setCheckbox('standardizeColumns', true, 'columnOptions');
+            }
+        }
+
+        // Missing values
+        if (config.replace_missing_values) {
+            setCheckbox('replaceMissing', true, 'missingOptions');
+            const na = config.replace_missing_values.na_strings || [];
+            setText('naStrings', (na || []).join('\n'));
+            const tcols = config.replace_missing_values.target_columns || [];
+            setText('targetColumns', (tcols || []).join(', '));
+        } else if (config.hasOwnProperty('replace_missing_values') && config.replace_missing_values === null) {
+            setCheckbox('replaceMissing', false, 'missingOptions');
+        }
+
+        // Duplicates
+        if (config.remove_duplicates) {
+            setCheckbox('removeDuplicates', true, 'duplicateOptions');
+            const subset = config.remove_duplicates.subset || config.remove_duplicates.target_columns || [];
+            setText('duplicateSubset', (subset || []).join(', '));
+            setSelect('duplicateKeep', config.remove_duplicates.keep || 'first');
+        } else if (config.hasOwnProperty('remove_duplicates') && config.remove_duplicates === null) {
+            setCheckbox('removeDuplicates', false, 'duplicateOptions');
+        }
+
+        // Constants
+        if (config.remove_constants) {
+            setCheckbox('removeConstants', true, 'constantOptions');
+            setRange('constantCutoff', config.remove_constants.cutoff, 'cutoffValue', v => Math.round(v * 100) + '% same value');
+            const excl = config.remove_constants.exclude_columns || [];
+            setText('excludeColumns', (excl || []).join(', '));
+        } else if (config.hasOwnProperty('remove_constants') && config.remove_constants === null) {
+            setCheckbox('removeConstants', false, 'constantOptions');
+        }
+
+        // Dates
+        if (config.standardize_dates) {
+            setCheckbox('standardizeDates', true, 'dateOptions');
+            const dcols = config.standardize_dates.target_columns || [];
+            setText('dateColumns', (dcols || []).join(', '));
+            const tf = config.standardize_dates.timeframe || [];
+            if (tf.length === 2) {
+                setText('startDate', tf[0]);
+                setText('endDate', tf[1]);
+            }
+            setRange('errorTolerance', config.standardize_dates.error_tolerance, 'toleranceValue', v => Math.round(v * 100) + '% errors allowed');
+        }
+
+        // Subject IDs
+        if (config.standardize_subject_ids) {
+            setCheckbox('validateSubjectIds', true, 'subjectIdOptions');
+            const sid = config.standardize_subject_ids;
+            setText('subjectIdColumns', (sid.target_columns || []).join(', '));
+            setText('idPrefix', sid.prefix || '');
+            setText('idSuffix', sid.suffix || '');
+            if (sid.nchar) setText('idLength', sid.nchar);
+        }
+
+        // Numeric conversion
+        if (config.to_numeric) {
+            setCheckbox('convertNumeric', true, 'numericOptions');
+            setText('numericColumns', (config.to_numeric.target_columns || []).join(', '));
+            setSelect('numericLanguage', config.to_numeric.lang || 'en');
+            setSelect('numericErrors', config.to_numeric.errors || 'coerce');
+        }
+
+        // Dictionary
+        if (config.dictionary) {
+            setCheckbox('dictionaryCleaning', true, 'dictionaryOptions');
+            try {
+                document.getElementById('dictionaryJson').value = JSON.stringify(config.dictionary, null, 2);
+            } catch (e) {}
+        }
+
+        // Date sequence
+        if (config.check_date_sequence) {
+            setCheckbox('checkDateSequence', true, 'dateSequenceOptions');
+            setText('dateSequenceColumns', (config.check_date_sequence || []).join(', '));
+        }
+
+        // Global
+        if (config.hasOwnProperty('verbose')) setCheckbox('verbose', !!config.verbose);
+        if (config.hasOwnProperty('strict_validation')) setCheckbox('strictValidation', !!config.strict_validation);
+        if (config.hasOwnProperty('max_memory_usage')) setSelect('maxMemory', config.max_memory_usage || '');
     }
 });
 </script>

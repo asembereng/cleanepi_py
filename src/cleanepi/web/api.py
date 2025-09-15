@@ -63,6 +63,13 @@ class CleaningAPI:
         # Setup templates and static files
         templates_dir = os.path.join(os.path.dirname(__file__), "templates")
         self.templates = Jinja2Templates(directory=templates_dir)
+        # Ensure template changes are picked up without server restart in dev
+        try:
+            # Starlette's Jinja2Templates exposes env; enable auto-reload
+            self.templates.env.auto_reload = True  # type: ignore[attr-defined]
+            self.templates.env.cache = {}  # disable template cache in dev
+        except Exception:
+            pass
         
         self._setup_routes()
         
@@ -174,26 +181,36 @@ class CleaningAPI:
         @self.app.get("/", response_class=HTMLResponse)
         async def web_interface(request: Request):
             """Main web interface."""
-            return self.templates.TemplateResponse(
+            response = self.templates.TemplateResponse(
                 "index.html",
                 {"request": request, "title": "cleanepi - Data Cleaning Tool"}
             )
+            # Prevent browser caching so template/JS changes show immediately
+            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+            response.headers["Pragma"] = "no-cache"
+            return response
         
         @self.app.get("/jobs", response_class=HTMLResponse)
         async def jobs_interface(request: Request):
             """Jobs management interface."""
-            return self.templates.TemplateResponse(
+            response = self.templates.TemplateResponse(
                 "jobs.html", 
                 {"request": request, "title": "Job Management"}
             )
+            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+            response.headers["Pragma"] = "no-cache"
+            return response
         
         @self.app.get("/config", response_class=HTMLResponse)
         async def config_interface(request: Request):
             """Configuration interface."""
-            return self.templates.TemplateResponse(
+            response = self.templates.TemplateResponse(
                 "config.html",
                 {"request": request, "title": "Configuration"}
             )
+            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+            response.headers["Pragma"] = "no-cache"
+            return response
         
         # API Routes
         @self.app.post("/api/clean")
@@ -325,6 +342,60 @@ class CleaningAPI:
             """List jobs with optional filtering."""
             jobs = await job_manager.list_jobs(status_filter=status, limit=limit)
             return [job.to_dict() for job in jobs]
+
+        @self.app.get("/api/jobs/{job_id}/download")
+        async def download_job_result(
+            job_id: str,
+            job_manager: JobManager = Depends(get_job_manager)
+        ):
+            """Download cleaned results for a completed job as CSV.
+
+            Re-runs cleaning using the persisted source file and saved config to ensure a full dataset is returned.
+            """
+            job = await job_manager.get_job_status(job_id)
+            if not job:
+                raise HTTPException(status_code=404, detail="Job not found")
+            if job.status != JobStatus.COMPLETED:
+                raise HTTPException(status_code=400, detail="Job is not completed")
+            if not job.source_path or not os.path.exists(job.source_path):
+                raise HTTPException(status_code=410, detail="Original file unavailable for download")
+
+            # Load original data from persisted file
+            file_ext = os.path.splitext(job.source_path)[1].lower()
+            try:
+                if file_ext == '.csv':
+                    encoding = detect_encoding(job.source_path)
+                    data = pd.read_csv(job.source_path, encoding=encoding)
+                elif file_ext in ['.xlsx', '.xls']:
+                    data = pd.read_excel(job.source_path)
+                elif file_ext == '.json':
+                    data = pd.read_json(job.source_path)
+                elif file_ext == '.parquet':
+                    data = pd.read_parquet(job.source_path)
+                else:
+                    raise HTTPException(status_code=400, detail=f"Unsupported file type: {file_ext}")
+
+                # Rebuild config
+                config_dict = job.config or {}
+                cleaning_config = CleaningConfig(**config_dict)
+
+                # Clean data
+                cleaned_data, _report = clean_data(data, cleaning_config)
+
+                # Stream CSV
+                import io
+                buffer = io.StringIO()
+                cleaned_data.to_csv(buffer, index=False)
+                buffer.seek(0)
+                base = (job.original_filename or 'cleanepi_output').rsplit('.', 1)[0]
+                download_name = f"{base}_cleaned.csv"
+                headers = {"Content-Disposition": f"attachment; filename=\"{download_name}\""}
+                return StreamingResponse(buffer, media_type="text/csv", headers=headers)
+            except HTTPException:
+                raise
+            except Exception as e:
+                logger.error(f"Error preparing job download {job_id}: {e}")
+                raise HTTPException(status_code=500, detail=str(e))
         
         @self.app.delete("/api/jobs/{job_id}")
         async def cancel_job(
@@ -446,7 +517,10 @@ class CleaningAPI:
             job_id = await job_manager.submit_job(
                 data=data,
                 config=cleaning_config,
-                filename=file.filename or "uploaded_file"
+                filename=file.filename or "uploaded_file",
+                original_file_bytes=content,
+                original_file_ext=file_ext,
+                temp_dir=self.config.temp_dir,
             )
 
             logger.info(f"Submitted async job {job_id} for file: {file.filename}")

@@ -92,6 +92,129 @@
                             <a href="/config" class="btn btn-outline-secondary btn-sm">
                                 <i class="bi bi-gear"></i> Advanced Configuration
                             </a>
+                            <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#advancedOptions" aria-expanded="false" aria-controls="advancedOptions">
+                                <i class="bi bi-sliders"></i> Advanced Options (quick)
+                            </button>
+                        </div>
+                        <!-- Advanced Options (inline) -->
+                        <div class="collapse mt-3" id="advancedOptions">
+                            <div class="card card-body">
+                                <div class="row g-3">
+                                    <!-- Date Standardization -->
+                                    <div class="col-12">
+                                        <h6 class="mb-2"><i class="bi bi-calendar-date"></i> Date Standardization</h6>
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="adv_enable_dates">
+                                            <label class="form-check-label" for="adv_enable_dates">Enable</label>
+                                        </div>
+                                        <div class="row g-2 ms-1">
+                                            <div class="col-md-6">
+                                                <label class="form-label form-label-sm">Date columns (comma-separated)</label>
+                                                <input type="text" class="form-control form-control-sm" id="adv_dates_columns" placeholder="e.g., dob, sample_date">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label form-label-sm">Formats (optional, comma-separated)</label>
+                                                <input type="text" class="form-control form-control-sm" id="adv_dates_formats" placeholder="e.g., %Y-%m-%d, %d/%m/%Y">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Subject ID Validation -->
+                                    <div class="col-12">
+                                        <h6 class="mb-2"><i class="bi bi-person-badge"></i> Subject ID Validation</h6>
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="adv_enable_subject_id">
+                                            <label class="form-check-label" for="adv_enable_subject_id">Enable</label>
+                                        </div>
+                                        <div class="row g-2 ms-1">
+                                            <div class="col-md-6">
+                                                <label class="form-label form-label-sm">ID columns (comma-separated)</label>
+                                                <input type="text" class="form-control form-control-sm" id="adv_sid_columns" placeholder="e.g., subject_id">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label form-label-sm">Prefix</label>
+                                                <input type="text" class="form-control form-control-sm" id="adv_sid_prefix" placeholder="optional">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label form-label-sm">Suffix</label>
+                                                <input type="text" class="form-control form-control-sm" id="adv_sid_suffix" placeholder="optional">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label form-label-sm">Range min</label>
+                                                <input type="number" class="form-control form-control-sm" id="adv_sid_range_min" placeholder="optional">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label form-label-sm">Range max</label>
+                                                <input type="number" class="form-control form-control-sm" id="adv_sid_range_max" placeholder="optional">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label form-label-sm">Length (nchar)</label>
+                                                <input type="number" class="form-control form-control-sm" id="adv_sid_nchar" placeholder="optional">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label form-label-sm">Regex pattern</label>
+                                                <input type="text" class="form-control form-control-sm" id="adv_sid_pattern" placeholder="optional">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Numeric Conversion -->
+                                    <div class="col-12">
+                                        <h6 class="mb-2"><i class="bi bi-123"></i> Numeric Conversion</h6>
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="adv_enable_numeric">
+                                            <label class="form-check-label" for="adv_enable_numeric">Enable</label>
+                                        </div>
+                                        <div class="row g-2 ms-1">
+                                            <div class="col-md-6">
+                                                <label class="form-label form-label-sm">Columns (comma-separated)</label>
+                                                <input type="text" class="form-control form-control-sm" id="adv_num_columns" placeholder="e.g., age, height">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label form-label-sm">Language</label>
+                                                <select class="form-select form-select-sm" id="adv_num_lang">
+                                                    <option value="en" selected>English (en)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label form-label-sm">Errors</label>
+                                                <select class="form-select form-select-sm" id="adv_num_errors">
+                                                    <option value="coerce" selected>coerce</option>
+                                                    <option value="ignore">ignore</option>
+                                                    <option value="raise">raise</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dictionary-based Cleaning -->
+                                    <div class="col-12">
+                                        <h6 class="mb-2"><i class="bi bi-journal-text"></i> Dictionary-based Cleaning</h6>
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="adv_enable_dictionary">
+                                            <label class="form-check-label" for="adv_enable_dictionary">Enable</label>
+                                        </div>
+                                        <div class="ms-1">
+                                            <label class="form-label form-label-sm">Dictionary JSON (by column)</label>
+                                            <textarea class="form-control form-control-sm" id="adv_dictionary_json" placeholder='e.g., {"status": {"pos": "positive", "neg": "negative"}}' rows="3"></textarea>
+                                            <div class="form-text">Provide a JSON object mapping columns to value-replacement maps.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Date Sequence Validation -->
+                                    <div class="col-12">
+                                        <h6 class="mb-2"><i class="bi bi-arrow-down-up"></i> Date Sequence Validation</h6>
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="adv_enable_date_seq">
+                                            <label class="form-check-label" for="adv_enable_date_seq">Enable</label>
+                                        </div>
+                                        <div class="ms-1">
+                                            <label class="form-label form-label-sm">Date columns in sequence (comma-separated)</label>
+                                            <input type="text" class="form-control form-control-sm" id="adv_date_seq_columns" placeholder="e.g., visit1_date, visit2_date, visit3_date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -355,13 +478,175 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    function buildConfig() {
+    function deepMerge(target, source) {
+        // Simple deep merge for plain objects
+        if (!source || typeof source !== 'object') return target;
+        const result = Array.isArray(target) ? target.slice() : { ...(target || {}) };
+        for (const [key, value] of Object.entries(source)) {
+            if (value && typeof value === 'object' && !Array.isArray(value)) {
+                result[key] = deepMerge(result[key] || {}, value);
+            } else {
+                result[key] = value;
+            }
+        }
+        return result;
+    }
+
+    function buildQuickConfig() {
         return {
             standardize_column_names: document.getElementById('standardizeColumns').checked,
             replace_missing_values: document.getElementById('replaceMissing').checked ? {} : null,
             remove_duplicates: document.getElementById('removeDuplicates').checked ? {} : null,
             remove_constants: document.getElementById('removeConstants').checked ? {} : null
         };
+    }
+
+    function buildConfig() {
+        // Load saved advanced configuration from localStorage (set in /config page)
+        let advanced = {};
+        try {
+            const saved = localStorage.getItem('cleanepi_config');
+            if (saved) {
+                advanced = JSON.parse(saved);
+            }
+        } catch (e) {
+            console.warn('Failed to load saved configuration from localStorage:', e);
+        }
+
+        // Build quick config from toggles
+        const quick = buildQuickConfig();
+
+        // Build page-level advanced config from inline controls
+        const pageAdv = buildPageAdvancedConfig();
+
+        // If quick toggles are false, ensure they override any advanced truthy entries
+        // For true toggles, allow advanced object options to remain
+        const overrides = {};
+        overrides.standardize_column_names = quick.standardize_column_names ? (advanced.standardize_column_names ?? true) : false;
+        overrides.replace_missing_values = quick.replace_missing_values ? (advanced.replace_missing_values ?? {}) : null;
+        overrides.remove_duplicates = quick.remove_duplicates ? (advanced.remove_duplicates ?? {}) : null;
+        overrides.remove_constants = quick.remove_constants ? (advanced.remove_constants ?? {}) : null;
+
+        // Merge: advanced as base, apply overrides on top so toggles take precedence
+        let merged = deepMerge(advanced, overrides);
+
+        // Apply page-level advanced config last so it overrides saved advanced config
+        merged = deepMerge(merged, pageAdv);
+
+        // Pydantic DuplicateConfig.keep expects string 'first'|'last'|'False'; ensure type is string if provided
+        if (merged.remove_duplicates && typeof merged.remove_duplicates.keep !== 'undefined') {
+            if (merged.remove_duplicates.keep === false) merged.remove_duplicates.keep = 'False';
+            merged.remove_duplicates.keep = String(merged.remove_duplicates.keep);
+        }
+
+        return merged;
+    }
+
+    function parseList(value) {
+        if (!value) return [];
+        return value.split(',').map(s => s.trim()).filter(Boolean);
+    }
+
+    function buildPageAdvancedConfig() {
+        const cfg = {};
+
+        // Date Standardization
+        const datesEnabled = document.getElementById('adv_enable_dates')?.checked;
+        if (datesEnabled) {
+            const cols = parseList(document.getElementById('adv_dates_columns')?.value || '');
+            const fmts = parseList(document.getElementById('adv_dates_formats')?.value || '');
+            cfg.standardize_dates = {};
+            if (cols.length) cfg.standardize_dates.target_columns = cols;
+            if (fmts.length) cfg.standardize_dates.formats = fmts;
+            // Only keep object if it has content; otherwise default enable with empty object
+            if (Object.keys(cfg.standardize_dates).length === 0) cfg.standardize_dates = {};
+        } else {
+            cfg.standardize_dates = null;
+        }
+
+        // Subject ID Validation (requires at least one target column)
+        const sidEnabled = document.getElementById('adv_enable_subject_id')?.checked;
+        if (sidEnabled) {
+            const cols = parseList(document.getElementById('adv_sid_columns')?.value || '');
+            if (cols.length) {
+                const sid = { target_columns: cols };
+                const prefix = document.getElementById('adv_sid_prefix')?.value?.trim();
+                const suffix = document.getElementById('adv_sid_suffix')?.value?.trim();
+                const rmin = document.getElementById('adv_sid_range_min')?.value;
+                const rmax = document.getElementById('adv_sid_range_max')?.value;
+                const nchar = document.getElementById('adv_sid_nchar')?.value;
+                const pattern = document.getElementById('adv_sid_pattern')?.value?.trim();
+                if (prefix) sid.prefix = prefix;
+                if (suffix) sid.suffix = suffix;
+                if (rmin !== '' && rmax !== '') sid.range = [Number(rmin), Number(rmax)];
+                if (nchar !== '') sid.nchar = Number(nchar);
+                if (pattern) sid.pattern = pattern;
+                cfg.standardize_subject_ids = sid;
+            } else {
+                showAlert('Subject ID validation enabled but no ID columns provided. It will be skipped.', 'warning');
+                cfg.standardize_subject_ids = null;
+            }
+        } else {
+            cfg.standardize_subject_ids = null;
+        }
+
+        // Numeric Conversion (requires target columns)
+        const numEnabled = document.getElementById('adv_enable_numeric')?.checked;
+        if (numEnabled) {
+            const cols = parseList(document.getElementById('adv_num_columns')?.value || '');
+            if (cols.length) {
+                const num = { target_columns: cols };
+                const lang = document.getElementById('adv_num_lang')?.value || 'en';
+                const errors = document.getElementById('adv_num_errors')?.value || 'coerce';
+                num.lang = lang;
+                num.errors = errors;
+                cfg.to_numeric = num;
+            } else {
+                showAlert('Numeric conversion enabled but no columns provided. It will be skipped.', 'warning');
+                cfg.to_numeric = null;
+            }
+        } else {
+            cfg.to_numeric = null;
+        }
+
+        // Dictionary-based Cleaning (requires valid JSON)
+        const dictEnabled = document.getElementById('adv_enable_dictionary')?.checked;
+        if (dictEnabled) {
+            const raw = document.getElementById('adv_dictionary_json')?.value || '';
+            if (raw.trim()) {
+                try {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+                        cfg.dictionary = parsed;
+                    } else {
+                        showAlert('Dictionary JSON must be an object mapping columns to value maps. Skipping dictionary.', 'warning');
+                        cfg.dictionary = null;
+                    }
+                } catch (e) {
+                    showAlert('Invalid dictionary JSON. Skipping dictionary.', 'danger');
+                    cfg.dictionary = null;
+                }
+            } else {
+                showAlert('Dictionary enabled but no JSON provided. It will be skipped.', 'warning');
+                cfg.dictionary = null;
+            }
+        } else {
+            cfg.dictionary = null;
+        }
+
+        // Date Sequence Validation
+        const dseqEnabled = document.getElementById('adv_enable_date_seq')?.checked;
+        if (dseqEnabled) {
+            const cols = parseList(document.getElementById('adv_date_seq_columns')?.value || '');
+            cfg.check_date_sequence = cols.length ? cols : null;
+            if (!cols.length) {
+                showAlert('Date sequence validation enabled but no columns provided. It will be skipped.', 'warning');
+            }
+        } else {
+            cfg.check_date_sequence = null;
+        }
+
+        return cfg;
     }
     
     function showResults(result) {
