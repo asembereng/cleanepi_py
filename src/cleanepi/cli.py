@@ -74,23 +74,23 @@ def create_config_from_args(args) -> CleaningConfig:
     
     # Missing value config
     missing_config = None
-    if args.na_strings or args.replace_missing:
+    if args.na_strings or (getattr(args, 'replace_missing', False) is True):
         na_strings = args.na_strings.split(',') if args.na_strings else None
         missing_config = MissingValueConfig(na_strings=na_strings)
     
     # Duplicate config
     duplicate_config = None
-    if args.remove_duplicates:
+    if getattr(args, 'remove_duplicates', False) is True:
         duplicate_config = DuplicateConfig(keep=args.duplicate_keep)
     
     # Constant config
     constant_config = None
-    if args.remove_constants:
+    if getattr(args, 'remove_constants', False) is True:
         constant_config = ConstantConfig(cutoff=args.constant_cutoff)
     
     # Date standardization config
     date_config = None
-    if args.standardize_dates:
+    if getattr(args, 'standardize_dates', False) is True:
         target_columns = args.date_columns.split(',') if args.date_columns else None
         timeframe = None
         if args.date_timeframe:
@@ -106,18 +106,18 @@ def create_config_from_args(args) -> CleaningConfig:
     
     # Subject ID validation config
     subject_id_config = None
-    if args.validate_subject_ids:
+    if getattr(args, 'validate_subject_ids', False) is True:
         target_columns = args.subject_id_columns.split(',') if args.subject_id_columns else []
         subject_id_config = SubjectIDConfig(
             target_columns=target_columns,
-            prefix=args.subject_id_prefix,
-            suffix=args.subject_id_suffix,
-            nchar=args.subject_id_length
+            prefix=(args.subject_id_prefix if isinstance(args.subject_id_prefix, (str, type(None))) else None),
+            suffix=(args.subject_id_suffix if isinstance(args.subject_id_suffix, (str, type(None))) else None),
+            nchar=(args.subject_id_length if isinstance(args.subject_id_length, (int, type(None))) else None)
         )
     
     # Numeric conversion config
     numeric_config = None
-    if args.convert_numeric:
+    if getattr(args, 'convert_numeric', False) is True:
         target_columns = args.numeric_columns.split(',') if args.numeric_columns else []
         numeric_config = NumericConfig(
             target_columns=target_columns,
@@ -127,17 +127,18 @@ def create_config_from_args(args) -> CleaningConfig:
     
     # Dictionary cleaning
     dictionary = None
-    if args.dictionary_file:
-        with open(args.dictionary_file) as f:
+    dict_path = getattr(args, 'dictionary_file', None)
+    if isinstance(dict_path, str) and dict_path.strip():
+        with open(dict_path) as f:
             dictionary = json.load(f)
     
     # Date sequence validation
     date_sequence_columns = None
-    if args.check_date_sequence:
+    if getattr(args, 'check_date_sequence', False) is True:
         date_sequence_columns = args.date_sequence_columns.split(',') if args.date_sequence_columns else None
     
     return CleaningConfig(
-        standardize_column_names=args.standardize_columns,
+        standardize_column_names=(getattr(args, 'standardize_columns', False) is True),
         replace_missing_values=missing_config,
         remove_duplicates=duplicate_config,
         remove_constants=constant_config,
@@ -146,7 +147,7 @@ def create_config_from_args(args) -> CleaningConfig:
         to_numeric=numeric_config,
         dictionary=dictionary,
         check_date_sequence=date_sequence_columns,
-        verbose=args.verbose
+        verbose=(getattr(args, 'verbose', False) is True)
     )
 
 

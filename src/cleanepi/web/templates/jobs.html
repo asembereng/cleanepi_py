@@ -415,8 +415,27 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (job.status === 'completed') {
                 downloadBtn.style.display = 'inline-block';
-                // TODO: Implement download functionality
-                downloadBtn.onclick = () => showAlert('Download functionality not yet implemented', 'info');
+                downloadBtn.onclick = async () => {
+                    try {
+                        const resp = await fetch(`/api/jobs/${job.job_id}/download`);
+                        if (!resp.ok) {
+                            const err = await resp.json().catch(() => ({ detail: `HTTP ${resp.status}` }));
+                            throw new Error(err.detail || `HTTP ${resp.status}`);
+                        }
+                        const blob = await resp.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        const baseName = (job.original_filename || 'cleanepi_output').replace(/\.[^.]+$/, '');
+                        a.download = `${baseName}_cleaned.csv`;
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+                    } catch (error) {
+                        showAlert(`Download failed: ${error.message}`, 'danger');
+                    }
+                };
             } else {
                 downloadBtn.style.display = 'none';
             }

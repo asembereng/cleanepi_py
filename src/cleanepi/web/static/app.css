@@ -1,0 +1,15 @@
+/* Basic app styles to confirm static serving and provide a visible cue */
+.navbar {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.preview-table table thead th {
+  position: sticky;
+  top: 0;
+  background: #fff;
+}
+
+/* Config section subtle accent */
+.config-section {
+  border: 1px solid #e9ecef;
+}
