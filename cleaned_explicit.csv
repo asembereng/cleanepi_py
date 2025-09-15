@@ -1,0 +1,4 @@
+patient_id,date_of_birth,status,constant_col
+1,1990-01-01,positive,same
+2,-99,negative,same
+1,1990-01-01,positive,same
