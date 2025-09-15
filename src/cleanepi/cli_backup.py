@@ -121,17 +121,18 @@ def create_config_from_args(args) -> CleaningConfig:
     # Numeric conversion config
     numeric_config = None
     if getattr(args, 'convert_numeric', False) is True:
-        target_columns = args.numeric_columns.split(',') if args.numeric_columns else None
+        target_columns = args.numeric_columns.split(',') if args.numeric_columns else []
         numeric_config = NumericConfig(
             target_columns=target_columns,
-            language=args.numeric_language,
+            lang=args.numeric_language,
             errors=args.numeric_errors
         )
     
     # Dictionary cleaning
     dictionary = None
-    if args.dictionary_file:
-        with open(args.dictionary_file, 'r') as f:
+    dict_path = getattr(args, 'dictionary_file', None)
+    if isinstance(dict_path, str) and dict_path.strip():
+        with open(dict_path) as f:
             dictionary = json.load(f)
     
     # Date sequence validation
@@ -151,63 +152,6 @@ def create_config_from_args(args) -> CleaningConfig:
         check_date_sequence=date_sequence_columns,
         verbose=(getattr(args, 'verbose', False) is True)
     )
-
-
-def add_build_commands(subparsers):
-    """Add distribution building commands."""
-    build_parser = subparsers.add_parser(
-        "build",
-        help="Build distributable packages"
-    )
-    build_subparsers = build_parser.add_subparsers(dest="build_command", help="Build commands")
-    
-    # Offline installer
-    offline_parser = build_subparsers.add_parser("offline", help="Create offline installer package")
-    offline_parser.add_argument("--source-dir", help="Source directory path")
-    
-    # Executable only
-    exe_parser = build_subparsers.add_parser("executable", help="Build standalone executable")
-    exe_parser.add_argument("--source-dir", help="Source directory path")
-    
-    # Platform installer
-    installer_parser = build_subparsers.add_parser("installer", help="Create platform-specific installer")
-    installer_parser.add_argument("--source-dir", help="Source directory path")
-
-
-def handle_build_commands(args):
-    """Handle distribution building commands."""
-    try:
-        from cleanepi.distribution import DistributionBuilder
-    except ImportError:
-        print("❌ Distribution building not available - missing dependencies")
-        print("   Install with: pip install pyinstaller")
-        sys.exit(1)
-    
-    builder = DistributionBuilder(args.source_dir)
-    
-    if args.build_command == "offline":
-        try:
-            archive_path = builder.create_offline_installer()
-            print(f"✅ Offline installer created: {archive_path}")
-        except Exception as e:
-            print(f"❌ Failed to create offline installer: {e}")
-            sys.exit(1)
-    
-    elif args.build_command == "executable":
-        success = builder.build_executable()
-        if success:
-            print("✅ Executable built successfully")
-        else:
-            print("❌ Failed to build executable")
-            sys.exit(1)
-    
-    elif args.build_command == "installer":
-        success = builder.create_installer()
-        if success:
-            print("✅ Platform installer created successfully")
-        else:
-            print("❌ Failed to create platform installer")
-            sys.exit(1)
 
 
 def add_service_commands(subparsers):
@@ -340,37 +284,37 @@ def add_clean_commands(subparsers):
     clean_parser.add_argument("--config", help="JSON configuration file")
     
     # Cleaning options
-    clean_parser.add_argument(
+    parser.add_argument(
         "--standardize-columns", 
         action="store_true",
         help="Standardize column names to snake_case"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--replace-missing",
         action="store_true", 
         help="Replace missing values with NA"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--na-strings",
         help="Comma-separated list of strings to treat as missing values"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--remove-duplicates",
         action="store_true",
         help="Remove duplicate rows"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--duplicate-keep",
         choices=["first", "last", "False"],
         default="first",
         help="Which duplicates to keep"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--remove-constants",
         action="store_true",
         help="Remove constant columns"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--constant-cutoff",
         type=float,
         default=1.0,
@@ -378,90 +322,92 @@ def add_clean_commands(subparsers):
     )
     
     # Advanced cleaning options
-    clean_parser.add_argument(
+    parser.add_argument(
         "--standardize-dates",
         action="store_true",
         help="Standardize date columns with intelligent parsing"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--date-columns",
         help="Comma-separated list of date columns to standardize (auto-detect if not specified)"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--date-timeframe",
         help="Valid date range as 'start_date,end_date' in YYYY-MM-DD format"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--date-error-tolerance",
         type=float,
         default=0.4,
         help="Proportion of unparseable dates to tolerate (0.0-1.0)"
     )
-    clean_parser.add_argument(
+    
+    parser.add_argument(
         "--validate-subject-ids",
         action="store_true",
         help="Validate subject ID columns"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--subject-id-columns",
         help="Comma-separated list of subject ID columns to validate"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--subject-id-prefix",
         help="Expected prefix for subject IDs"
     )
-    clean_parser.add_argument(
-        "--subject-id-suffix",
+    parser.add_argument(
+        "--subject-id-suffix", 
         help="Expected suffix for subject IDs"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--subject-id-length",
         type=int,
         help="Expected total character length for subject IDs"
     )
-    clean_parser.add_argument(
+    
+    parser.add_argument(
         "--convert-numeric",
         action="store_true",
         help="Convert text columns to numeric with intelligent parsing"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--numeric-columns",
         help="Comma-separated list of columns to convert to numeric"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--numeric-language",
         default="en",
         choices=["en", "es", "fr"],
         help="Language for number word conversion (e.g., 'one' -> 1)"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--numeric-errors",
         default="coerce",
         choices=["raise", "coerce", "ignore"],
         help="How to handle conversion errors"
     )
     
-    clean_parser.add_argument(
+    parser.add_argument(
         "--dictionary-file",
         help="JSON file containing dictionary mappings for value replacement"
     )
     
-    clean_parser.add_argument(
+    parser.add_argument(
         "--check-date-sequence",
         action="store_true",
         help="Check date sequence validity and logical ordering"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--date-sequence-columns",
         help="Comma-separated list of date columns to check in chronological order"
     )
     
     # Output options
-    clean_parser.add_argument(
+    parser.add_argument(
         "--report",
         help="Path to save cleaning report (JSON)"
     )
-    clean_parser.add_argument(
+    parser.add_argument(
         "--preview",
         type=int,
         default=0,
@@ -469,15 +415,19 @@ def add_clean_commands(subparsers):
     )
     
     # General options
-    clean_parser.add_argument(
+    parser.add_argument(
         "-v", "--verbose",
         action="store_true",
         help="Enable verbose logging"
     )
-
-
-def handle_clean_commands(args):
-    """Handle data cleaning commands."""
+    parser.add_argument(
+        "--version",
+        action="version",
+        version="cleanepi 0.1.0"
+    )
+    
+    args = parser.parse_args()
+    
     # Setup logging
     setup_logging(args.verbose)
     
@@ -531,68 +481,6 @@ def handle_clean_commands(args):
     except Exception as e:
         logger.error(f"Error: {str(e)}")
         sys.exit(1)
-
-
-def main():
-    """Main CLI function with subcommands."""
-    parser = argparse.ArgumentParser(
-        description="CleanEPI - Clean and standardize epidemiological data",
-        prog="cleanepi"
-    )
-    
-    # Version
-    parser.add_argument(
-        "--version",
-        action="version",
-        version="cleanepi 0.1.0"
-    )
-    
-    # Subcommands
-    subparsers = parser.add_subparsers(dest="command", help="Available commands")
-    
-    # Add subcommands
-    add_clean_commands(subparsers)
-    add_service_commands(subparsers)
-    add_build_commands(subparsers)
-    
-    # Quick start command
-    quick_parser = subparsers.add_parser(
-        "web", 
-        help="Quickly start web interface (same as 'service start')"
-    )
-    quick_parser.add_argument("--host", default="127.0.0.1", help="Host to bind to")
-    quick_parser.add_argument("--port", type=int, default=8000, help="Port to bind to")
-    quick_parser.add_argument("--no-browser", action="store_true", help="Don't open browser")
-    
-    # For backwards compatibility, if no subcommand is used and first arg looks like a file,
-    # treat it as a clean command
-    if len(sys.argv) > 1 and not sys.argv[1].startswith('-') and sys.argv[1] not in ['clean', 'service', 'web', 'build']:
-        # Insert 'clean' command for backwards compatibility
-        sys.argv.insert(1, 'clean')
-    elif len(sys.argv) == 1:
-        # No arguments, show help
-        parser.print_help()
-        return
-    
-    args = parser.parse_args()
-    
-    # Handle commands
-    if args.command == "clean":
-        handle_clean_commands(args)
-    elif args.command == "service":
-        handle_service_commands(args)
-    elif args.command == "build":
-        handle_build_commands(args)
-    elif args.command == "web":
-        # Quick web start
-        manager = WebServerManager()
-        manager.start_server(
-            host=args.host,
-            port=args.port,
-            open_browser=not args.no_browser
-        )
-    else:
-        parser.print_help()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+Patient ID,Date of Birth,Status,Constant Col
+1,1990-01-01,positive,same
+2,-99,negative,same
+1,1990-01-01,positive,same
