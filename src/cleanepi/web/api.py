@@ -11,6 +11,7 @@ import json
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Form, Depends
 from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
@@ -18,7 +19,13 @@ import pandas as pd
 from loguru import logger
 
 from ..core.clean_data import clean_data
-from ..core.config import CleaningConfig, WebConfig
+from ..core.config import (
+    CleaningConfig,
+    WebConfig,
+    MissingValueConfig,
+    DuplicateConfig,
+    ConstantConfig,
+)
 from ..utils.validation import validate_file_safety, detect_encoding
 from .jobs import JobManager, JobStatus, get_job_manager, cleanup_job_manager
 
@@ -39,7 +46,13 @@ class CleaningAPI:
     
     def __init__(self, config: Optional[WebConfig] = None):
         """Initialize the cleaning API."""
-        self.config = config or WebConfig()
+        self.config = config or WebConfig(
+            max_file_size=100 * 1024 * 1024,
+            allowed_file_types=[".csv", ".xlsx", ".parquet", ".json"],
+            temp_dir="/tmp/cleanepi",
+            enable_async=True,
+            chunk_size=10000,
+        )
         self.app = FastAPI(
             title="cleanepi API",
             description="Clean and standardize epidemiological data",
@@ -59,6 +72,100 @@ class CleaningAPI:
             self.app.mount("/static", StaticFiles(directory=static_dir), name="static")
         except Exception:
             logger.warning("Static files directory not found, skipping static file serving")
+
+    @staticmethod
+    def _default_cleaning_config() -> CleaningConfig:
+        """Construct a default CleaningConfig with explicit defaults.
+        This avoids static type checker complaints in some environments.
+        """
+        return CleaningConfig(
+            standardize_column_names=True,
+            replace_missing_values=MissingValueConfig(
+                target_columns=None,
+                na_strings=["-99", "N/A", "NULL", "", "missing", "unknown"],
+                custom_na_by_column=None,
+            ),
+            remove_duplicates=DuplicateConfig(
+                target_columns=None,
+                subset=None,
+                keep="first",
+            ),
+            remove_constants=ConstantConfig(
+                cutoff=1.0,
+                exclude_columns=None,
+            ),
+            standardize_dates=None,
+            standardize_subject_ids=None,
+            to_numeric=None,
+            dictionary=None,
+            check_date_sequence=None,
+            verbose=True,
+            strict_validation=False,
+            max_memory_usage=None,
+        )
+    
+    @staticmethod
+    def _to_jsonable(obj: Any) -> Any:
+        """Convert objects to JSON-serializable primitives.
+        - Converts numpy types to native Python types
+        - Converts pandas Timestamps/NaT to ISO strings/None
+        - Replaces NaN/None-like with None
+        - Recursively handles lists, tuples, sets, and dicts
+        """
+        try:
+            import numpy as np  # type: ignore
+        except Exception:  # pragma: no cover - numpy is a core dependency
+            np = None  # type: ignore
+        import pandas as pd  # already imported at module level
+        from datetime import datetime, date
+
+        # Fast path for common primitives
+        if obj is None or isinstance(obj, (str, int, float, bool)):
+            # Guard for float('nan')
+            if isinstance(obj, float):
+                try:
+                    if obj != obj:  # NaN check
+                        return None
+                except Exception:
+                    pass
+            return obj
+
+        # pandas NA/NaT or general missing
+        try:
+            if pd.isna(obj):  # type: ignore
+                return None
+        except Exception:
+            pass
+
+        # numpy scalars -> python
+        if np is not None:
+            if isinstance(obj, getattr(np, 'integer', ())):
+                return int(obj)
+            if isinstance(obj, getattr(np, 'floating', ())):
+                try:
+                    return None if np.isnan(obj) else float(obj)
+                except Exception:
+                    return float(obj)
+            if isinstance(obj, getattr(np, 'bool_', ())):
+                return bool(obj)
+
+        # datetime-like
+        if isinstance(obj, (datetime, date)):
+            return obj.isoformat()
+        try:
+            if isinstance(obj, pd.Timestamp):  # type: ignore
+                return obj.isoformat()
+        except Exception:
+            pass
+
+        # containers
+        if isinstance(obj, dict):
+            return {str(k): CleaningAPI._to_jsonable(v) for k, v in obj.items()}
+        if isinstance(obj, (list, tuple, set)):
+            return [CleaningAPI._to_jsonable(v) for v in obj]
+
+        # Fallback to string representation
+        return str(obj)
     
     def _setup_routes(self):
         """Setup API routes."""
@@ -102,6 +209,88 @@ class CleaningAPI:
             - config_json: Optional JSON string with cleaning configuration
             """
             return await self._clean_data_handler(file, config_json)
+
+        @self.app.post("/api/clean/download")
+        async def clean_data_download(
+            file: UploadFile = File(...),
+            config_json: Optional[str] = Form(None)
+        ):
+            """
+            Clean uploaded data file and return CSV as a download (synchronous).
+
+            This reprocesses the uploaded file using the provided config and streams the
+            cleaned result as a CSV attachment.
+            """
+            # Validate file and load data (reuse handler logic up to cleaning)
+            # Create temporary file
+            if not file:
+                raise HTTPException(status_code=400, detail="No file provided")
+
+            # Validate extension and size
+            file_ext = os.path.splitext(file.filename or "")[1].lower()
+            if file_ext not in self.config.allowed_file_types:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"File type not allowed. Allowed types: {self.config.allowed_file_types}"
+                )
+
+            # Note: UploadFile may not expose reliable size; enforce after reading content
+
+            import io
+
+            with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tmp_file:
+                content = await file.read()
+                # Enforce max file size in bytes
+                if self.config.max_file_size and len(content) > self.config.max_file_size:
+                    tmp_file.close()
+                    os.unlink(tmp_file.name)
+                    raise HTTPException(status_code=413, detail="File too large")
+                tmp_file.write(content)
+                tmp_file_path = tmp_file.name
+
+            try:
+                # Validate file safety (allowed extensions and basic checks)
+                validate_file_safety(tmp_file_path, self.config.allowed_file_types)
+
+                # Load data
+                if file_ext == '.csv':
+                    encoding = detect_encoding(tmp_file_path)
+                    data = pd.read_csv(tmp_file_path, encoding=encoding)
+                elif file_ext in ['.xlsx', '.xls']:
+                    data = pd.read_excel(tmp_file_path)
+                elif file_ext == '.json':
+                    data = pd.read_json(tmp_file_path)
+                elif file_ext == '.parquet':
+                    data = pd.read_parquet(tmp_file_path)
+                else:
+                    raise HTTPException(status_code=400, detail=f"Unsupported file type: {file_ext}")
+
+                # Parse configuration
+                if config_json:
+                    config_dict = json.loads(config_json)
+                    cleaning_config = CleaningConfig(**config_dict)
+                else:
+                    cleaning_config = self._default_cleaning_config()
+
+                # Clean data
+                cleaned_data, report = clean_data(data, cleaning_config)
+
+                # Stream as CSV
+                buffer = io.StringIO()
+                cleaned_data.to_csv(buffer, index=False)
+                buffer.seek(0)
+
+                download_name = (file.filename or "cleanepi_output").rsplit('.', 1)[0] + "_cleaned.csv"
+                headers = {"Content-Disposition": f"attachment; filename=\"{download_name}\""}
+                return StreamingResponse(buffer, media_type="text/csv", headers=headers)
+            except json.JSONDecodeError:
+                raise HTTPException(status_code=400, detail="Invalid JSON configuration")
+            except Exception as e:
+                logger.error(f"Error generating download: {str(e)}")
+                raise HTTPException(status_code=500, detail=str(e))
+            finally:
+                if os.path.exists(tmp_file_path):
+                    os.unlink(tmp_file_path)
         
         @self.app.post("/api/jobs/submit")
         async def submit_cleaning_job(
@@ -159,7 +348,7 @@ class CleaningAPI:
         @self.app.get("/api/config/default")
         async def get_default_config():
             """Get default cleaning configuration."""
-            config = CleaningConfig()
+            config = self._default_cleaning_config()
             return config.dict()
         
         # Legacy endpoints (for backward compatibility)
@@ -190,7 +379,7 @@ class CleaningAPI:
         @self.app.get("/config/default")
         async def get_default_config_legacy():
             """Legacy config endpoint."""
-            config = CleaningConfig()
+            config = self._default_cleaning_config()
             return config.dict()
     
     async def _submit_job_handler(
@@ -200,31 +389,36 @@ class CleaningAPI:
         job_manager: JobManager
     ) -> Dict[str, Any]:
         """Handle async job submission."""
-        
-        # Validate file
-        if file.size > self.config.max_file_size:
-            raise HTTPException(
-                status_code=413,
-                detail=f"File too large. Maximum size: {self.config.max_file_size} bytes"
-            )
-        
-        file_ext = os.path.splitext(file.filename)[1].lower()
+        # Basic checks
+        if not file:
+            raise HTTPException(status_code=400, detail="No file provided")
+
+        file_ext = os.path.splitext((file.filename or ""))[1].lower()
         if file_ext not in self.config.allowed_file_types:
             raise HTTPException(
                 status_code=400,
                 detail=f"File type not allowed. Allowed types: {self.config.allowed_file_types}"
             )
-        
+
         # Create temporary file and load data
         with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tmp_file:
             content = await file.read()
+            # Enforce max file size (bytes)
+            if self.config.max_file_size and len(content) > self.config.max_file_size:
+                tmp_file.close()
+                os.unlink(tmp_file.name)
+                raise HTTPException(status_code=413, detail="File too large")
             tmp_file.write(content)
             tmp_file_path = tmp_file.name
-        
+
         try:
-            # Validate file safety
+            # Validate file safety (size check in MB)
+            try:
+                max_mb = (self.config.max_file_size or (100 * 1024 * 1024)) / (1024 * 1024)
+            except Exception:
+                max_mb = 100
             validate_file_safety(tmp_file_path, self.config.allowed_file_types)
-            
+
             # Load data
             if file_ext == '.csv':
                 encoding = detect_encoding(tmp_file_path)
@@ -240,21 +434,21 @@ class CleaningAPI:
                     status_code=400,
                     detail=f"Unsupported file type: {file_ext}"
                 )
-            
+
             # Parse configuration
             if config_json:
                 config_dict = json.loads(config_json)
                 cleaning_config = CleaningConfig(**config_dict)
             else:
-                cleaning_config = CleaningConfig()
-            
+                cleaning_config = self._default_cleaning_config()
+
             # Submit job
             job_id = await job_manager.submit_job(
                 data=data,
                 config=cleaning_config,
                 filename=file.filename or "uploaded_file"
             )
-            
+
             logger.info(f"Submitted async job {job_id} for file: {file.filename}")
             return {
                 "job_id": job_id,
@@ -262,13 +456,12 @@ class CleaningAPI:
                 "message": "Job submitted successfully",
                 "check_status_url": f"/api/jobs/{job_id}"
             }
-            
+
         except json.JSONDecodeError:
             raise HTTPException(status_code=400, detail="Invalid JSON configuration")
         except Exception as e:
             logger.error(f"Error submitting job: {str(e)}")
             raise HTTPException(status_code=500, detail=str(e))
-        
         finally:
             # Clean up temporary file
             if os.path.exists(tmp_file_path):
@@ -280,75 +473,96 @@ class CleaningAPI:
         config_json: Optional[str] = None
     ) -> Dict[str, Any]:
         """Handle data cleaning request."""
-        
-        # Validate file
-        if file.size > self.config.max_file_size:
-            raise HTTPException(
-                status_code=413,
-                detail=f"File too large. Maximum size: {self.config.max_file_size} bytes"
-            )
-        
-        file_ext = os.path.splitext(file.filename)[1].lower()
+        # Basic checks
+        if not file:
+            raise HTTPException(status_code=400, detail="No file provided")
+
+        file_ext = os.path.splitext((file.filename or ""))[1].lower()
         if file_ext not in self.config.allowed_file_types:
             raise HTTPException(
                 status_code=400,
                 detail=f"File type not allowed. Allowed types: {self.config.allowed_file_types}"
             )
-        
+
         # Create temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tmp_file:
             content = await file.read()
+            if self.config.max_file_size and len(content) > self.config.max_file_size:
+                tmp_file.close()
+                os.unlink(tmp_file.name)
+                raise HTTPException(status_code=413, detail="File too large")
             tmp_file.write(content)
             tmp_file_path = tmp_file.name
-        
+
         try:
-            # Validate file safety
+            # Validate file safety with MB limit
+            try:
+                max_mb = (self.config.max_file_size or (100 * 1024 * 1024)) / (1024 * 1024)
+            except Exception:
+                max_mb = 100
             validate_file_safety(tmp_file_path, self.config.allowed_file_types)
-            
+
             # Load data
             if file_ext == '.csv':
                 encoding = detect_encoding(tmp_file_path)
                 data = pd.read_csv(tmp_file_path, encoding=encoding)
             elif file_ext in ['.xlsx', '.xls']:
                 data = pd.read_excel(tmp_file_path)
+            elif file_ext == '.json':
+                data = pd.read_json(tmp_file_path)
+            elif file_ext == '.parquet':
+                data = pd.read_parquet(tmp_file_path)
             else:
                 raise HTTPException(
                     status_code=400,
                     detail=f"Unsupported file type: {file_ext}"
                 )
-            
+
             # Parse configuration
             if config_json:
                 import json
                 config_dict = json.loads(config_json)
                 cleaning_config = CleaningConfig(**config_dict)
             else:
-                cleaning_config = CleaningConfig()
-            
+                cleaning_config = self._default_cleaning_config()
+
             # Clean data
             cleaned_data, report = clean_data(data, cleaning_config)
-            
-            # Prepare response
+
+            # Build JSON-safe payload
+            preview_records = cleaned_data.head(10).to_dict(orient="records")
+            preview_sanitized = [
+                {k: CleaningAPI._to_jsonable(v) for k, v in row.items()}
+                for row in preview_records
+            ]
+
+            missing_values_raw = cleaned_data.isna().sum().to_dict()
+            missing_values = {
+                str(k): CleaningAPI._to_jsonable(v) for k, v in missing_values_raw.items()
+            }
+
             response = {
                 "status": "success",
-                "original_shape": data.shape,
-                "cleaned_shape": cleaned_data.shape,
-                "report_summary": report.summary(),
-                "preview": cleaned_data.head(10).to_dict(orient="records"),
+                "original_shape": CleaningAPI._to_jsonable(data.shape),
+                "cleaned_shape": CleaningAPI._to_jsonable(cleaned_data.shape),
+                "report_summary": CleaningAPI._to_jsonable(report.summary()),
+                "preview": preview_sanitized,
                 "column_info": {
-                    "original_columns": list(data.columns),
-                    "cleaned_columns": list(cleaned_data.columns),
-                    "missing_values": cleaned_data.isna().sum().to_dict()
-                }
+                    "original_columns": CleaningAPI._to_jsonable(list(data.columns)),
+                    "cleaned_columns": CleaningAPI._to_jsonable(list(cleaned_data.columns)),
+                    "missing_values": missing_values,
+                },
             }
-            
+
+            # Final pass to ensure no NaN/NaT or non-JSON types leak through
+            response = CleaningAPI._to_jsonable(response)
+
             logger.info(f"Successfully cleaned data file: {file.filename}")
             return response
-            
+
         except Exception as e:
             logger.error(f"Error cleaning data: {str(e)}")
             raise HTTPException(status_code=500, detail=str(e))
-        
         finally:
             # Clean up temporary file
             if os.path.exists(tmp_file_path):
