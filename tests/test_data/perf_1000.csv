@@ -1,0 +1,1001 @@
+Study ID,Date of Birth,Patient Age,Test Result,Empty Column,Constant Value,duplicate_group
+PS001P2,,17,positive,-99,same,0
+PS002P2,23/12/2002,thirty,N/A,,same,0
+PS003P2,"Apr 21, 2008",75,inconclusive,,same,0
+PS004P2,"Apr 28, 1964",27,inconclusive,,same,0
+PS005P2,17/03/1982,93,-99,NULL,same,0
+PS006P2,"Jan 26, 1957",46,N/A,,same,0
+PS007P2,2009-04-29,29,positive,,same,0
+PS008P2,1982-09-24,34,positive,,same,0
+PS009P2,1971-12-18,81,N/A,,same,0
+PS010P2,1955-01-07,51,inconclusive,missing,same,0
+PS011P2,1978-03-26,82,-99,,same,0
+PS012P2,"May 12, 2000",74,-99,N/A,same,0
+PS013P2,18/09/1995,twenty,negative,,same,0
+PS014P2,"Nov 16, 1987",59,N/A,,same,0
+PS015P2,"Jan 12, 1951",68,inconclusive,,same,0
+PS016P2,01/05/1976,unknown,inconclusive,,same,0
+PS017P2,1995-07-19,81,N/A,,same,0
+PS018P2,"Jun 29, 1964",0,N/A,,same,0
+PS019P2,26/07/1982,72,positive,,same,0
+PS020P2,"Mar 17, 1956",fifty,N/A,,same,0
+PS021P2,02/06/2004,96,negative,,same,0
+PS022P2,"Apr 05, 2010",57,positive,,same,0
+PS023P2,"Nov 21, 1951",0,positive,,same,0
+PS024P2,1956-01-18,thirty,inconclusive,,same,0
+PS025P2,"Nov 14, 1961",60,negative,,same,0
+PS026P2,1967-01-31,54,-99,,same,0
+PS027P2,"May 30, 2010",fifty,inconclusive,,same,0
+PS028P2,1967-03-11,thirty,inconclusive,-99,same,0
+PS029P2,"Oct 03, 1989",69,positive,N/A,same,0
+PS030P2,02/12/1964,51,positive,,same,0
+PS031P2,10/01/1985,36,-99,,same,0
+PS032P2,"Nov 11, 1999",37,negative,,same,0
+PS033P2,1998-08-23,fifty,N/A,,same,0
+PS034P2,"Feb 07, 1955",76,positive,,same,0
+PS035P2,"Oct 03, 1960",79,positive,,same,0
+PS036P2,25/11/1996,91,inconclusive,,same,0
+PS037P2,"Apr 05, 2010",96,missing,-99,same,0
+PS038P2,"Jul 28, 1956",44,positive,,same,0
+PS039P2,26/02/1964,78,missing,,same,0
+PS040P2,2009-07-07,twenty,positive,,same,0
+PS041P2,"Apr 12, 1975",87,inconclusive,,same,0
+PS042P2,1954-07-23,5,positive,,same,0
+PS043P2,1973-07-02,54,-99,unknown,same,0
+PS044P2,"May 17, 1963",70,negative,,same,0
+PS045P2,1982-09-18,31,positive,,same,0
+PS046P2,"Jun 17, 1986",30,negative,,same,0
+PS047P2,1986-12-28,100,-99,N/A,same,0
+PS048P2,1973-12-08,twenty,-99,,same,0
+PS049P2,19/04/1991,29,N/A,,same,0
+PS050P2,1974-12-30,82,N/A,missing,same,1
+PS051P2,1979-09-17,22,N/A,,same,1
+PS052P2,"Sep 23, 1959",40,-99,,same,1
+PS053P2,"Jul 23, 1984",fifty,positive,,same,1
+PS054P2,2010-03-02,forty,N/A,,same,1
+PS055P2,"Dec 10, 1976",51,inconclusive,,same,1
+PS056P2,27/08/2009,78,N/A,,same,1
+PS057P2,14/01/1950,74,N/A,,same,1
+PS058P2,"Sep 01, 1989",94,negative,,same,1
+PS059P2,"Jul 23, 2009",thirty,inconclusive,,same,1
+PS060P2,1952-03-11,98,positive,missing,same,1
+PS061P2,"Jun 12, 1967",31,negative,,same,1
+PS062P2,25/07/1959,89,N/A,,same,1
+PS063P2,20/11/1960,67,N/A,NULL,same,1
+PS064P2,"Dec 18, 2004",70,-99,,same,1
+PS065P2,02/08/1992,81,inconclusive,,same,1
+PS066P2,2006-03-25,forty,negative,,same,1
+PS067P2,1998-06-17,88,negative,,same,1
+PS068P2,27/07/1986,26,-99,,same,1
+PS069P2,"Oct 03, 1951",,inconclusive,NULL,same,1
+PS070P2,"Apr 15, 1998",28,-99,,same,1
+PS071P2,09/08/1952,51,negative,missing,same,1
+PS072P2,1997-12-02,84,positive,,same,1
+PS073P2,1991-06-03,27,-99,,same,1
+PS074P2,06/01/1984,32,positive,,same,1
+PS075P2,03/09/1954,twenty,positive,,same,1
+PS076P2,"Oct 30, 1951",twenty,N/A,,same,1
+PS077P2,27/12/1972,95,positive,,same,1
+PS078P2,1977-11-27,73,-99,,same,1
+PS079P2,"Oct 26, 1956",13,inconclusive,,same,1
+PS080P2,"Nov 10, 1960",54,inconclusive,,same,1
+PS081P2,19/02/1951,forty,-99,,same,1
+PS082P2,"Oct 22, 1996",68,-99,,same,1
+PS083P2,26/02/2003,11,inconclusive,,same,1
+PS084P2,"Sep 10, 1991",3,-99,,same,1
+PS085P2,11/01/1969,76,inconclusive,,same,1
+PS086P2,1967-02-21,71,negative,,same,1
+PS087P2,13/01/1994,thirty,-99,,same,1
+PS088P2,05/03/2002,54,N/A,,same,1
+PS089P2,22/04/1974,thirty,inconclusive,,same,1
+PS090P2,1966-08-11,92,N/A,,same,1
+PS091P2,1975-05-23,46,negative,,same,1
+PS092P2,10/05/1961,forty,negative,,same,1
+PS093P2,1959-03-16,56,inconclusive,,same,1
+PS094P2,1992-11-10,9,N/A,,same,1
+PS095P2,"May 21, 1963",thirty,positive,,same,1
+PS096P2,"Jun 25, 2003",57,-99,,same,1
+PS097P2,21/06/1988,twenty,negative,,same,1
+PS098P2,1957-04-14,20,positive,,same,1
+PS099P2,28/02/1992,36,-99,,same,1
+PS100P2,"Sep 25, 1973",25,-99,,same,2
+PS101P2,15/05/1963,thirty,inconclusive,,same,2
+PS102P2,23/11/1975,89,-99,,same,2
+PS103P2,20/04/1994,NULL,inconclusive,,same,2
+PS104P2,"Jul 16, 1970",2,inconclusive,,same,2
+PS105P2,19/09/1965,35,negative,,same,2
+PS106P2,1994-02-11,41,positive,,same,2
+PS107P2,14/06/1994,97,N/A,,same,2
+PS108P2,23/08/1972,65,positive,,same,2
+PS109P2,1987-01-28,96,-99,,same,2
+PS110P2,06/04/1968,56,-99,missing,same,2
+PS111P2,"Jun 21, 1971",70,-99,-99,same,2
+PS112P2,1991-05-26,91,inconclusive,,same,2
+PS113P2,15/04/1993,49,negative,,same,2
+PS114P2,1962-04-01,53,inconclusive,,same,2
+PS115P2,26/03/1950,74,-99,,same,2
+PS116P2,14/06/1993,48,-99,unknown,same,2
+PS117P2,"Jun 05, 1971",52,positive,,same,2
+PS118P2,15/03/1984,83,negative,,same,2
+PS119P2,"Jan 24, 1995",fifty,positive,,same,2
+PS120P2,07/12/1962,9,-99,,same,2
+PS121P2,"Nov 30, 2005",forty,N/A,,same,2
+PS122P2,"Oct 11, 1993",forty,negative,,same,2
+PS123P2,31/02/2000,thirty,inconclusive,,same,2
+PS124P2,13/01/1955,31,N/A,,same,2
+PS125P2,1966-02-26,48,N/A,,same,2
+PS126P2,2002-04-26,58,inconclusive,NULL,same,2
+PS127P2,"Oct 22, 1975",forty,N/A,unknown,same,2
+PS128P2,09/06/1972,49,-99,,same,2
+PS129P2,"Mar 16, 1982",2,-99,,same,2
+PS130P2,"May 27, 1954",36,negative,,same,2
+PS131P2,2007-02-11,92,negative,unknown,same,2
+PS132P2,15/07/1953,,negative,,same,2
+PS133P2,1987-04-12,46,N/A,,same,2
+PS134P2,05/10/1964,37,inconclusive,,same,2
+PS135P2,1956-10-03,86,-99,,same,2
+PS136P2,1982-10-25,missing,positive,,same,2
+PS137P2,27/04/2010,47,positive,,same,2
+PS138P2,"Aug 01, 2005",82,positive,,same,2
+PS139P2,"Feb 10, 1977",twenty,inconclusive,,same,2
+PS140P2,"Jan 24, 1971",85,N/A,,same,2
+PS141P2,12/11/1963,78,-99,,same,2
+PS142P2,1983-03-30,46,positive,,same,2
+PS143P2,07/11/2007,15,-99,,same,2
+PS144P2,"May 16, 2007",forty,negative,,same,2
+PS145P2,1968-05-30,75,negative,,same,2
+PS146P2,N/A,69,inconclusive,,same,2
+PS147P2,N/A,2,negative,,same,2
+PS148P2,"Oct 08, 1987",fifty,inconclusive,,same,2
+PS149P2,1995-03-15,forty,-99,,same,2
+PS150P2,21/12/1992,fifty,positive,,same,3
+PS151P2,1963-04-23,74,N/A,,same,3
+PS152P2,"Aug 06, 2003",55,positive,,same,3
+PS153P2,"Sep 26, 2008",27,-99,,same,3
+PS154P2,29/05/1980,40,-99,,same,3
+PS155P2,"Sep 11, 1963",twenty,positive,,same,3
+PS156P2,1983-06-07,71,N/A,,same,3
+PS157P2,"Sep 21, 1981",92,positive,,same,3
+PS158P2,1981-07-19,84,-99,,same,3
+PS159P2,27/11/1999,28,-99,missing,same,3
+PS160P2,"Jan 17, 2005",unknown,,,same,3
+PS161P2,20/09/1977,18,N/A,,same,3
+PS162P2,2006-10-21,48,-99,,same,3
+PS163P2,"Dec 16, 1977",76,positive,,same,3
+PS164P2,2005-06-06,84,-99,,same,3
+PS165P2,1974-07-05,fifty,positive,,same,3
+PS166P2,"Aug 28, 1993",fifty,N/A,,same,3
+PS167P2,1968-12-13,15,positive,,same,3
+PS168P2,04/08/1961,71,inconclusive,-99,same,3
+PS169P2,1989-02-19,forty,N/A,,same,3
+PS170P2,07/06/2007,41,negative,,same,3
+PS171P2,1982-06-19,fifty,N/A,,same,3
+PS172P2,"Nov 02, 1977",21,positive,,same,3
+PS173P2,1995-10-02,93,negative,,same,3
+PS174P2,1967-09-13,83,positive,,same,3
+PS175P2,01/05/1994,57,N/A,,same,3
+PS176P2,09/04/2006,fifty,inconclusive,,same,3
+PS177P2,"Jul 29, 1981",4,positive,,same,3
+PS178P2,2007-11-02,59,N/A,,same,3
+PS179P2,06/09/1953,24,inconclusive,,same,3
+PS180P2,21/07/1955,43,positive,,same,3
+PS181P2,"Mar 24, 1972",66,N/A,,same,3
+PS182P2,19/05/1975,76,positive,,same,3
+PS183P2,30/11/1955,36,inconclusive,,same,3
+PS184P2,2004-01-27,18,inconclusive,,same,3
+PS185P2,27/05/2009,10,inconclusive,,same,3
+PS186P2,1979-06-21,94,N/A,,same,3
+PS187P2,,27,inconclusive,,same,3
+PS188P2,1970-04-29,100,positive,,same,3
+PS189P2,1997-03-28,79,negative,,same,3
+PS190P2,"Mar 23, 1966",21,-99,,same,3
+PS191P2,24/04/1971,100,-99,,same,3
+PS192P2,1992-01-29,56,-99,,same,3
+PS193P2,"Feb 13, 1995",25,N/A,,same,3
+PS194P2,11/07/2007,13,N/A,,same,3
+PS195P2,20/05/1964,55,positive,,same,3
+PS196P2,22/06/1990,50,N/A,,same,3
+PS197P2,28/04/1957,12,inconclusive,,same,3
+PS198P2,27/09/1975,fifty,-99,-99,same,3
+PS199P2,1972-12-17,93,N/A,,same,3
+PS199P2,1972-12-17,93,N/A,,same,3
+PS201P2,1975-11-06,fifty,N/A,,same,4
+PS202P2,"Nov 04, 1994",73,negative,,same,4
+PS203P2,"Feb 21, 1950",23,positive,,same,4
+PS204P2,"Mar 12, 1997",70,positive,,same,4
+PS205P2,11/01/2007,2,inconclusive,,same,4
+PS206P2,"Dec 13, 2008",96,inconclusive,,same,4
+PS207P2,"May 16, 1980",59,-99,,same,4
+PS208P2,"Aug 30, 1955",37,negative,,same,4
+PS209P2,05/10/1953,69,-99,,same,4
+PS210P2,23/02/1967,83,inconclusive,,same,4
+PS211P2,15/03/1989,49,inconclusive,,same,4
+PS212P2,20/08/1994,10,-99,,same,4
+PS213P2,"Mar 11, 1966",forty,inconclusive,,same,4
+PS214P2,1988-03-24,5,inconclusive,,same,4
+PS215P2,2007-05-16,46,N/A,,same,4
+PS216P2,1952-10-17,56,positive,,same,4
+PS217P2,18/11/2007,4,N/A,,same,4
+PS218P2,13/04/1983,thirty,N/A,,same,4
+PS219P2,1975-01-02,N/A,-99,-99,same,4
+PS220P2,26/06/1973,78,inconclusive,N/A,same,4
+PS221P2,1961-01-01,91,-99,,same,4
+PS222P2,"Sep 03, 1978",forty,inconclusive,,same,4
+PS223P2,2007-03-19,15,negative,,same,4
+PS224P2,1994-04-28,59,N/A,-99,same,4
+PS225P2,30/09/1977,67,-99,,same,4
+PS226P2,1956-08-13,57,-99,,same,4
+PS227P2,"Jun 18, 1999",16,-99,-99,same,4
+PS228P2,1996-06-25,90,negative,,same,4
+PS229P2,28/01/1957,35,negative,,same,4
+PS230P2,"May 20, 1958",74,negative,,same,4
+PS231P2,16/04/2004,3,positive,,same,4
+PS232P2,29/09/2001,53,N/A,,same,4
+PS233P2,"Apr 07, 2006",61,negative,,same,4
+PS234P2,07/09/1976,fifty,-99,,same,4
+PS235P2,2004-06-05,93,inconclusive,,same,4
+PS236P2,"Mar 30, 1983",59,positive,,same,4
+PS237P2,1958-09-08,78,-99,N/A,same,4
+PS238P2,"May 18, 1979",20,-99,,same,4
+PS239P2,NULL,30,negative,,same,4
+PS240P2,30/03/1975,86,-99,,same,4
+PS241P2,24/08/1959,46,-99,,same,4
+PS242P2,"Feb 28, 2001",9,-99,,same,4
+PS243P2,"Feb 04, 1975",twenty,-99,missing,same,4
+PS244P2,1982-10-20,64,positive,,same,4
+PS245P2,18/11/1979,thirty,inconclusive,,same,4
+PS246P2,31/02/2000,43,N/A,,same,4
+PS247P2,02/07/2000,,positive,,same,4
+PS248P2,2006-06-15,83,N/A,,same,4
+PS249P2,08/05/2002,79,-99,,same,4
+PS250P2,"Oct 31, 1952",twenty,-99,,same,5
+PS251P2,17/04/1968,60,positive,,same,5
+PS252P2,27/04/2000,48,inconclusive,,same,5
+PS253P2,30/10/1997,92,inconclusive,,same,5
+PS254P2,12/02/1972,38,inconclusive,,same,5
+PS255P2,14/11/1993,92,inconclusive,,same,5
+PS256P2,25/09/1998,44,negative,,same,5
+PS257P2,02/02/1957,95,-99,,same,5
+PS258P2,"Apr 29, 1974",thirty,negative,N/A,same,5
+PS259P2,2007-03-27,91,-99,,same,5
+PS260P2,"Jun 19, 1950",83,-99,,same,5
+PS261P2,09/10/1975,twenty,N/A,,same,5
+PS262P2,1953-05-07,4,-99,,same,5
+PS263P2,missing,42,inconclusive,,same,5
+PS264P2,14/01/1997,fifty,inconclusive,,same,5
+PS265P2,"Jul 30, 1964",23,positive,,same,5
+PS266P2,"Dec 09, 2000",81,-99,,same,5
+PS267P2,13/10/1957,17,-99,,same,5
+PS268P2,25/05/1973,42,inconclusive,,same,5
+PS269P2,"Jun 19, 1973",85,positive,,same,5
+PS270P2,"Jan 31, 1995",81,inconclusive,,same,5
+PS271P2,25/12/1961,77,inconclusive,,same,5
+PS272P2,"Mar 29, 1992",97,negative,,same,5
+PS273P2,"May 06, 1957",9,N/A,,same,5
+PS274P2,1995-05-08,forty,N/A,,same,5
+PS275P2,26/04/2002,7,-99,,same,5
+PS276P2,2000-08-04,39,positive,,same,5
+PS277P2,"Jul 20, 1969",89,positive,,same,5
+PS278P2,11/03/1956,98,negative,unknown,same,5
+PS279P2,18/09/1987,48,-99,missing,same,5
+PS280P2,"Dec 06, 1961",fifty,N/A,-99,same,5
+PS281P2,15/01/1952,54,N/A,,same,5
+PS282P2,29/04/1991,92,positive,,same,5
+PS283P2,2005-03-02,twenty,-99,,same,5
+PS284P2,1954-05-15,29,N/A,-99,same,5
+PS285P2,"Jul 28, 1962",93,N/A,,same,5
+PS286P2,03/05/2010,84,N/A,,same,5
+PS287P2,"Jun 21, 1955",22,-99,,same,5
+PS288P2,"Nov 24, 1980",40,-99,,same,5
+PS289P2,"Jul 01, 1966",38,negative,missing,same,5
+PS290P2,09/01/1987,thirty,inconclusive,,same,5
+PS291P2,09/05/1990,24,positive,,same,5
+PS292P2,2004-02-03,97,N/A,,same,5
+PS293P2,1993-01-03,1,negative,-99,same,5
+PS294P2,1992-12-19,50,negative,,same,5
+PS295P2,25/02/1984,33,inconclusive,,same,5
+PS296P2,"Nov 06, 1958",26,inconclusive,,same,5
+PS297P2,"Nov 07, 1969",74,N/A,,same,5
+PS298P2,08/08/1967,31,-99,,same,5
+PS299P2,01/02/1973,62,-99,,same,5
+PS300P2,1965-03-09,69,positive,,same,6
+PS301P2,"Sep 01, 1956",N/A,negative,,same,6
+PS302P2,"Aug 16, 1969",fifty,missing,,same,6
+PS303P2,1951-01-24,36,positive,,same,6
+PS304P2,1988-08-18,thirty,negative,,same,6
+PS305P2,19/10/1981,fifty,-99,N/A,same,6
+PS306P2,"Nov 29, 1976",twenty,positive,,same,6
+PS307P2,1992-09-14,10,-99,,same,6
+PS308P2,"Sep 21, 1979",67,positive,unknown,same,6
+PS309P2,06/11/2000,87,inconclusive,,same,6
+PS310P2,1952-12-14,26,N/A,,same,6
+PS311P2,1985-09-25,72,-99,,same,6
+PS312P2,"Jun 08, 1984",92,positive,-99,same,6
+PS313P2,06/10/1958,fifty,,,same,6
+PS314P2,03/06/1990,48,-99,,same,6
+PS315P2,1984-02-06,31,positive,,same,6
+PS316P2,2006-11-14,13,,,same,6
+PS317P2,1974-03-15,57,N/A,,same,6
+PS318P2,1952-05-10,forty,NULL,,same,6
+PS319P2,"Aug 07, 1957",31,N/A,,same,6
+PS320P2,1965-03-17,18,positive,,same,6
+PS321P2,22/11/1976,31,-99,,same,6
+PS322P2,1959-08-07,42,N/A,NULL,same,6
+PS323P2,12/01/1980,76,negative,,same,6
+PS324P2,08/01/1968,40,inconclusive,,same,6
+PS325P2,2001-08-31,100,-99,N/A,same,6
+PS326P2,"Feb 18, 2003",3,-99,,same,6
+PS327P2,"Feb 20, 1976",52,-99,,same,6
+PS328P2,"Sep 01, 1972",48,positive,,same,6
+PS329P2,27/03/2002,88,-99,,same,6
+PS330P2,"Apr 04, 1982",81,positive,,same,6
+PS331P2,19/08/2009,72,-99,,same,6
+PS332P2,,95,N/A,,same,6
+PS333P2,30/10/1969,86,N/A,,same,6
+PS334P2,15/03/1952,10,positive,,same,6
+PS335P2,02/04/1981,66,-99,,same,6
+PS336P2,04/08/1990,twenty,positive,,same,6
+PS337P2,2010-10-01,66,negative,,same,6
+PS338P2,02/04/1988,23,negative,,same,6
+PS339P2,"Aug 14, 1952",75,-99,,same,6
+PS340P2,18/06/1968,8,N/A,N/A,same,6
+PS341P2,26/10/1982,fifty,N/A,,same,6
+PS342P2,"Nov 12, 1984",forty,-99,,same,6
+PS343P2,"Sep 07, 1976",40,positive,,same,6
+PS344P2,"Jun 29, 1983",76,negative,,same,6
+PS345P2,"Aug 30, 1993",22,N/A,,same,6
+PS346P2,14/10/1966,45,positive,,same,6
+PS347P2,"Jun 12, 1984",87,-99,,same,6
+PS348P2,1993-11-04,N/A,inconclusive,,same,6
+PS349P2,1975-11-25,98,-99,,same,6
+PS350P2,31/03/1960,46,N/A,,same,7
+PS351P2,"Aug 06, 1989",94,negative,NULL,same,7
+PS352P2,30/07/1973,twenty,negative,,same,7
+PS353P2,"Jun 16, 1981",78,negative,,same,7
+PS354P2,"Apr 30, 1955",68,negative,,same,7
+PS355P2,"Dec 16, 1975",86,positive,,same,7
+PS356P2,1986-12-05,16,negative,,same,7
+PS357P2,"Mar 17, 1972",forty,-99,,same,7
+PS358P2,09/05/1958,47,-99,,same,7
+PS359P2,"Mar 23, 1950",81,inconclusive,,same,7
+PS360P2,1985-09-06,63,inconclusive,,same,7
+PS361P2,"Feb 07, 1999",100,inconclusive,,same,7
+PS362P2,1954-02-14,2,positive,,same,7
+PS363P2,1990-12-16,88,negative,,same,7
+PS364P2,1974-08-02,47,negative,,same,7
+PS365P2,03/01/1971,0,negative,,same,7
+PS366P2,"Apr 17, 1970",unknown,inconclusive,NULL,same,7
+PS367P2,10/11/1961,93,positive,,same,7
+PS368P2,1976-11-05,17,negative,,same,7
+PS369P2,31/02/2000,27,negative,,same,7
+PS370P2,1989-09-09,twenty,N/A,,same,7
+PS371P2,10/07/1988,82,positive,,same,7
+PS372P2,05/07/2004,84,inconclusive,,same,7
+PS373P2,"Dec 04, 1966",100,negative,,same,7
+PS374P2,"Oct 27, 1994",1,inconclusive,,same,7
+PS375P2,28/12/2000,97,-99,,same,7
+PS376P2,"Jul 01, 1951",5,positive,,same,7
+PS377P2,"Sep 14, 1975",54,-99,,same,7
+PS378P2,2005-04-08,65,negative,,same,7
+PS379P2,25/04/1979,83,positive,,same,7
+PS380P2,1971-05-30,14,-99,,same,7
+PS381P2,"Oct 04, 2009",1,negative,,same,7
+PS382P2,"Feb 07, 1981",33,negative,,same,7
+PS383P2,"Feb 10, 1974",3,inconclusive,,same,7
+PS384P2,24/09/1955,9,-99,,same,7
+PS385P2,"Oct 28, 1994",98,positive,,same,7
+PS386P2,1960-05-07,-99,negative,,same,7
+PS387P2,1963-06-19,70,-99,,same,7
+PS388P2,14/09/1978,15,N/A,,same,7
+PS389P2,"Jan 09, 1970",8,-99,,same,7
+PS390P2,15/11/1977,47,negative,,same,7
+PS391P2,2005-11-13,63,negative,,same,7
+PS392P2,NULL,missing,inconclusive,,same,7
+PS393P2,unknown,94,inconclusive,,same,7
+PS394P2,15/05/1971,thirty,inconclusive,missing,same,7
+PS395P2,"Jan 22, 1987",95,positive,,same,7
+PS396P2,03/03/2007,55,negative,,same,7
+PS397P2,06/04/1978,40,-99,,same,7
+PS398P2,1968-03-09,19,positive,,same,7
+PS399P2,1986-06-21,26,-99,,same,7
+PS399P2,1986-06-21,26,-99,,same,7
+PS401P2,1960-10-04,90,N/A,,same,8
+PS402P2,1979-05-30,45,-99,,same,8
+PS403P2,1973-05-05,57,N/A,,same,8
+PS404P2,1991-06-15,twenty,positive,N/A,same,8
+PS405P2,11/10/1967,82,positive,,same,8
+PS406P2,1956-09-23,82,-99,,same,8
+PS407P2,1979-09-30,21,N/A,,same,8
+PS408P2,1994-07-06,45,negative,,same,8
+PS409P2,1990-01-05,31,inconclusive,NULL,same,8
+PS410P2,1955-06-22,thirty,N/A,missing,same,8
+PS411P2,02/10/1951,69,-99,,same,8
+PS412P2,08/11/1978,missing,,,same,8
+PS413P2,"Apr 26, 1992",29,negative,,same,8
+PS414P2,"Nov 29, 1973",7,negative,NULL,same,8
+PS415P2,1981-10-31,94,inconclusive,,same,8
+PS416P2,"Jul 20, 1981",24,-99,,same,8
+PS417P2,1953-05-28,2,N/A,,same,8
+PS418P2,2005-02-04,22,inconclusive,,same,8
+PS419P2,1962-09-16,9,inconclusive,,same,8
+PS420P2,2002-07-29,20,-99,unknown,same,8
+PS421P2,1978-06-19,78,inconclusive,,same,8
+PS422P2,24/09/1965,16,negative,missing,same,8
+PS423P2,"Feb 17, 1985",78,negative,,same,8
+PS424P2,1994-07-07,forty,inconclusive,-99,same,8
+PS425P2,"Feb 10, 2010",1,inconclusive,,same,8
+PS426P2,11/06/1981,6,-99,,same,8
+PS427P2,03/12/1964,69,-99,,same,8
+PS428P2,"Nov 10, 2001",57,positive,,same,8
+PS429P2,20/10/1951,forty,negative,,same,8
+PS430P2,"Sep 23, 1956",43,N/A,unknown,same,8
+PS431P2,12/10/1952,55,negative,,same,8
+PS432P2,17/01/1967,93,N/A,,same,8
+PS433P2,1971-04-24,62,negative,,same,8
+PS434P2,11/11/1957,61,negative,,same,8
+PS435P2,04/04/2007,14,inconclusive,,same,8
+PS436P2,21/04/2009,23,inconclusive,,same,8
+PS437P2,1989-12-29,28,inconclusive,,same,8
+PS438P2,2009-11-18,69,-99,,same,8
+PS439P2,1999-09-01,53,N/A,missing,same,8
+PS440P2,21/02/1971,91,positive,missing,same,8
+PS441P2,"Oct 14, 2010",57,negative,,same,8
+PS442P2,1969-01-04,87,-99,,same,8
+PS443P2,"Apr 08, 1963",8,positive,,same,8
+PS444P2,05/04/1979,1,N/A,,same,8
+PS445P2,05/02/1960,74,positive,,same,8
+PS446P2,23/01/1959,52,inconclusive,,same,8
+PS447P2,19/08/2004,18,N/A,,same,8
+PS448P2,24/06/1953,30,positive,,same,8
+PS449P2,25/10/1951,35,-99,,same,8
+PS450P2,1970-06-14,99,inconclusive,,same,9
+PS451P2,2007-12-01,52,-99,-99,same,9
+PS452P2,1996-03-24,51,negative,,same,9
+PS453P2,2001-01-07,25,positive,,same,9
+PS454P2,"May 01, 1982",59,N/A,unknown,same,9
+PS455P2,1952-09-28,22,-99,,same,9
+PS456P2,02/09/1964,36,positive,,same,9
+PS457P2,2001-05-04,86,negative,,same,9
+PS458P2,N/A,76,positive,,same,9
+PS459P2,"May 28, 1977",54,-99,,same,9
+PS460P2,30/07/1969,79,-99,,same,9
+PS461P2,04/06/2009,36,inconclusive,,same,9
+PS462P2,03/03/1980,33,inconclusive,,same,9
+PS463P2,1971-07-24,76,-99,,same,9
+PS464P2,"Apr 14, 1952",53,-99,,same,9
+PS465P2,2001-04-27,87,N/A,,same,9
+PS466P2,11/04/2010,84,N/A,,same,9
+PS467P2,"Jun 24, 1961",97,negative,unknown,same,9
+PS468P2,1958-01-05,39,-99,,same,9
+PS469P2,"May 18, 1973",60,positive,,same,9
+PS470P2,2005-09-06,15,-99,,same,9
+PS471P2,1963-07-12,72,-99,N/A,same,9
+PS472P2,02/04/1957,40,,,same,9
+PS473P2,"Feb 15, 1965",97,positive,,same,9
+PS474P2,10/07/1988,0,positive,,same,9
+PS475P2,07/04/1951,2,positive,,same,9
+PS476P2,22/11/1980,75,inconclusive,,same,9
+PS477P2,02/10/1976,67,inconclusive,,same,9
+PS478P2,02/01/1962,96,negative,NULL,same,9
+PS479P2,1951-09-19,27,positive,,same,9
+PS480P2,"Nov 21, 1982",unknown,inconclusive,,same,9
+PS481P2,2003-04-14,2,positive,,same,9
+PS482P2,1984-02-12,19,negative,,same,9
+PS483P2,05/01/1977,34,N/A,,same,9
+PS484P2,"May 31, 1959",twenty,positive,,same,9
+PS485P2,"Aug 05, 1973",52,inconclusive,,same,9
+PS486P2,"Aug 19, 1968",0,positive,missing,same,9
+PS487P2,08/01/2010,twenty,positive,,same,9
+PS488P2,23/12/1990,thirty,positive,,same,9
+PS489P2,19/09/2010,twenty,positive,,same,9
+PS490P2,19/04/1965,79,inconclusive,,same,9
+PS491P2,1980-09-30,58,inconclusive,,same,9
+PS492P2,31/02/2000,14,negative,,same,9
+PS493P2,1964-04-20,72,-99,,same,9
+PS494P2,unknown,93,negative,,same,9
+PS495P2,24/11/1986,40,positive,,same,9
+PS496P2,"Sep 25, 2001",85,inconclusive,,same,9
+PS497P2,2005-06-19,61,inconclusive,,same,9
+PS498P2,"May 04, 1963",1,negative,,same,9
+PS499P2,1994-06-26,30,inconclusive,,same,9
+PS500P2,"Dec 24, 1969",30,positive,,same,10
+PS501P2,1990-03-15,15,-99,,same,10
+PS502P2,12/03/1986,11,N/A,,same,10
+PS503P2,"Aug 10, 1995",43,inconclusive,,same,10
+PS504P2,09/10/1990,60,inconclusive,,same,10
+PS505P2,,37,N/A,,same,10
+PS506P2,1954-02-09,95,-99,,same,10
+PS507P2,1966-10-29,58,negative,,same,10
+PS508P2,1987-03-09,75,positive,,same,10
+PS509P2,"Jan 27, 2009",fifty,positive,,same,10
+PS510P2,"Oct 30, 1988",22,N/A,,same,10
+PS511P2,17/04/1959,41,N/A,,same,10
+PS512P2,"Aug 20, 2004",43,inconclusive,,same,10
+PS513P2,"Jan 11, 1987",38,N/A,,same,10
+PS514P2,"Aug 31, 1999",91,inconclusive,N/A,same,10
+PS515P2,2008-04-28,41,positive,,same,10
+PS516P2,"Apr 15, 2002",86,N/A,,same,10
+PS517P2,"Feb 23, 1951",6,positive,,same,10
+PS518P2,09/06/1964,twenty,inconclusive,,same,10
+PS519P2,07/03/1982,94,N/A,,same,10
+PS520P2,09/05/2000,89,inconclusive,,same,10
+PS521P2,26/03/1984,87,inconclusive,,same,10
+PS522P2,1972-07-19,56,negative,,same,10
+PS523P2,07/02/2008,77,negative,,same,10
+PS524P2,1990-04-07,thirty,N/A,,same,10
+PS525P2,"Jan 15, 1975",32,positive,,same,10
+PS526P2,1963-11-21,6,N/A,,same,10
+PS527P2,"May 18, 2001",40,N/A,,same,10
+PS528P2,"Feb 13, 1956",51,positive,unknown,same,10
+PS529P2,11/10/1979,96,N/A,unknown,same,10
+PS530P2,1950-10-16,82,N/A,,same,10
+PS531P2,"Jul 30, 1953",14,-99,,same,10
+PS532P2,"Mar 20, 1952",65,-99,,same,10
+PS533P2,2008-06-14,twenty,negative,,same,10
+PS534P2,1997-11-02,80,negative,,same,10
+PS535P2,1959-04-29,94,-99,unknown,same,10
+PS536P2,1963-10-18,11,positive,,same,10
+PS537P2,2000-01-26,33,-99,,same,10
+PS538P2,unknown,twenty,N/A,,same,10
+PS539P2,"Jan 31, 1954",64,positive,,same,10
+PS540P2,2004-06-01,48,-99,,same,10
+PS541P2,"Jan 10, 1964",69,inconclusive,,same,10
+PS542P2,"Oct 06, 2010",1,N/A,,same,10
+PS543P2,1953-09-30,70,positive,,same,10
+PS544P2,1980-11-06,65,negative,,same,10
+PS545P2,1972-09-03,72,positive,missing,same,10
+PS546P2,"May 20, 1991",8,inconclusive,,same,10
+PS547P2,16/09/1993,30,positive,,same,10
+PS548P2,12/05/1967,84,inconclusive,,same,10
+PS549P2,08/11/2000,21,positive,,same,10
+PS550P2,29/06/2007,86,inconclusive,,same,11
+PS551P2,09/03/1982,twenty,inconclusive,,same,11
+PS552P2,1998-04-28,9,positive,,same,11
+PS553P2,2006-09-01,98,N/A,,same,11
+PS554P2,"May 19, 1973",83,negative,,same,11
+PS555P2,"Nov 24, 2002",twenty,-99,,same,11
+PS556P2,"Jun 07, 1971",17,-99,,same,11
+PS557P2,"Oct 05, 2000",fifty,inconclusive,,same,11
+PS558P2,1970-10-16,85,negative,,same,11
+PS559P2,26/10/1984,5,inconclusive,unknown,same,11
+PS560P2,"Jul 15, 1974",22,-99,,same,11
+PS561P2,2008-08-12,28,N/A,,same,11
+PS562P2,15/12/1980,0,N/A,,same,11
+PS563P2,1970-08-20,19,negative,,same,11
+PS564P2,"Aug 13, 1960",92,positive,,same,11
+PS565P2,"Nov 26, 1968",2,negative,,same,11
+PS566P2,1964-06-15,missing,negative,,same,11
+PS567P2,"Feb 25, 1966",72,positive,,same,11
+PS568P2,1975-06-07,60,-99,,same,11
+PS569P2,2003-11-27,23,N/A,,same,11
+PS570P2,28/09/1980,fifty,-99,,same,11
+PS571P2,"Nov 23, 1996",77,positive,missing,same,11
+PS572P2,"Jul 03, 1953",fifty,negative,,same,11
+PS573P2,"Feb 09, 1950",47,positive,,same,11
+PS574P2,03/04/1993,97,N/A,,same,11
+PS575P2,1992-10-21,fifty,inconclusive,,same,11
+PS576P2,"Aug 22, 1950",48,negative,,same,11
+PS577P2,1982-07-02,32,inconclusive,,same,11
+PS578P2,"Oct 21, 1982",96,negative,,same,11
+PS579P2,1993-04-14,32,inconclusive,,same,11
+PS580P2,"Sep 19, 1985",15,negative,,same,11
+PS581P2,1964-07-07,43,N/A,,same,11
+PS582P2,1954-09-02,11,negative,,same,11
+PS583P2,1957-11-28,77,positive,NULL,same,11
+PS584P2,"Jan 30, 2005",76,positive,,same,11
+PS585P2,12/06/2007,84,N/A,,same,11
+PS586P2,"Oct 14, 2003",21,positive,,same,11
+PS587P2,1964-02-16,45,-99,,same,11
+PS588P2,"May 19, 1951",70,inconclusive,,same,11
+PS589P2,19/04/2002,28,N/A,,same,11
+PS590P2,N/A,13,N/A,,same,11
+PS591P2,"Jul 01, 1960",73,inconclusive,missing,same,11
+PS592P2,1993-05-22,58,-99,NULL,same,11
+PS593P2,06/06/1960,28,negative,,same,11
+PS594P2,"Sep 05, 1981",33,negative,,same,11
+PS595P2,1980-09-06,40,inconclusive,,same,11
+PS596P2,"May 26, 1966",63,negative,,same,11
+PS597P2,1973-10-23,79,inconclusive,,same,11
+PS598P2,"Jan 15, 1957",0,N/A,,same,11
+PS599P2,"Apr 21, 1983",73,inconclusive,missing,same,11
+PS599P2,"Apr 21, 1983",73,inconclusive,missing,same,11
+PS601P2,22/02/1975,6,N/A,,same,12
+PS602P2,1998-07-07,87,negative,,same,12
+PS603P2,28/06/1996,unknown,negative,,same,12
+PS604P2,"Jun 10, 1982",33,negative,,same,12
+PS605P2,1982-10-30,89,inconclusive,,same,12
+PS606P2,1990-06-09,87,negative,,same,12
+PS607P2,"Feb 26, 1971",18,negative,,same,12
+PS608P2,26/10/1987,80,N/A,,same,12
+PS609P2,28/08/1993,6,-99,,same,12
+PS610P2,01/05/1969,57,inconclusive,,same,12
+PS611P2,06/01/2000,44,N/A,,same,12
+PS612P2,"Mar 27, 2008",45,inconclusive,,same,12
+PS613P2,1990-02-05,80,negative,,same,12
+PS614P2,08/04/1980,9,positive,,same,12
+PS615P2,31/02/2000,82,-99,,same,12
+PS616P2,"Aug 01, 1982",52,negative,,same,12
+PS617P2,"Jan 19, 1971",95,positive,,same,12
+PS618P2,1958-07-29,6,positive,,same,12
+PS619P2,1957-06-20,83,-99,,same,12
+PS620P2,30/06/1975,thirty,positive,,same,12
+PS621P2,06/03/1979,34,N/A,unknown,same,12
+PS622P2,1998-05-20,95,N/A,,same,12
+PS623P2,21/11/1997,29,positive,,same,12
+PS624P2,1973-04-23,N/A,inconclusive,,same,12
+PS625P2,18/02/1994,37,N/A,,same,12
+PS626P2,1983-07-10,50,negative,,same,12
+PS627P2,18/12/1984,thirty,N/A,unknown,same,12
+PS628P2,23/05/1974,34,-99,,same,12
+PS629P2,04/04/1962,57,inconclusive,,same,12
+PS630P2,1978-10-07,2,negative,,same,12
+PS631P2,"Mar 21, 1961",-99,N/A,,same,12
+PS632P2,14/12/1977,4,inconclusive,,same,12
+PS633P2,1963-02-09,69,-99,,same,12
+PS634P2,1984-03-26,31,-99,,same,12
+PS635P2,1953-01-03,66,negative,,same,12
+PS636P2,01/01/1978,95,N/A,,same,12
+PS637P2,15/04/2007,85,negative,,same,12
+PS638P2,,50,-99,,same,12
+PS639P2,"Aug 21, 1992",11,negative,,same,12
+PS640P2,02/07/2005,80,positive,,same,12
+PS641P2,1998-02-13,71,inconclusive,,same,12
+PS642P2,1967-04-25,17,inconclusive,,same,12
+PS643P2,"Apr 02, 1989",24,N/A,,same,12
+PS644P2,09/01/1992,70,negative,,same,12
+PS645P2,11/07/1976,99,N/A,,same,12
+PS646P2,"Sep 06, 1951",30,inconclusive,,same,12
+PS647P2,09/05/1998,98,N/A,,same,12
+PS648P2,"Oct 07, 1986",twenty,positive,,same,12
+PS649P2,1952-10-21,4,N/A,,same,12
+PS650P2,"Dec 14, 1993",6,inconclusive,,same,13
+PS651P2,1951-03-05,10,-99,,same,13
+PS652P2,"Jan 24, 2000",47,positive,,same,13
+PS653P2,"Aug 25, 1953",27,N/A,,same,13
+PS654P2,12/09/1997,31,N/A,,same,13
+PS655P2,28/01/2000,73,inconclusive,,same,13
+PS656P2,1988-04-25,51,N/A,,same,13
+PS657P2,28/10/2003,70,inconclusive,,same,13
+PS658P2,24/10/2006,30,N/A,,same,13
+PS659P2,"May 14, 1999",57,-99,missing,same,13
+PS660P2,"Jun 19, 1951",0,inconclusive,,same,13
+PS661P2,1978-04-02,35,N/A,,same,13
+PS662P2,2001-04-13,19,negative,N/A,same,13
+PS663P2,26/11/1970,fifty,N/A,,same,13
+PS664P2,17/02/1979,88,N/A,,same,13
+PS665P2,15/08/2007,48,positive,,same,13
+PS666P2,19/03/1981,98,negative,,same,13
+PS667P2,"Jan 10, 1951",39,N/A,,same,13
+PS668P2,03/06/1963,6,-99,,same,13
+PS669P2,"Aug 10, 2001",100,-99,,same,13
+PS670P2,"Sep 09, 1992",33,positive,,same,13
+PS671P2,1961-09-12,50,N/A,,same,13
+PS672P2,1997-01-12,55,inconclusive,,same,13
+PS673P2,"Feb 05, 1960",24,inconclusive,,same,13
+PS674P2,1977-05-07,56,N/A,,same,13
+PS675P2,1970-12-12,93,positive,,same,13
+PS676P2,2005-09-18,1,inconclusive,,same,13
+PS677P2,N/A,27,negative,,same,13
+PS678P2,28/03/1999,88,positive,missing,same,13
+PS679P2,25/11/1953,89,N/A,,same,13
+PS680P2,1950-10-01,84,inconclusive,,same,13
+PS681P2,05/04/2008,90,positive,,same,13
+PS682P2,"Jul 27, 2003",58,N/A,,same,13
+PS683P2,"Mar 12, 1972",95,unknown,,same,13
+PS684P2,03/02/2006,64,inconclusive,,same,13
+PS685P2,1984-09-25,28,negative,,same,13
+PS686P2,1962-04-25,86,N/A,,same,13
+PS687P2,1987-06-11,39,N/A,,same,13
+PS688P2,"Jul 20, 1968",25,negative,,same,13
+PS689P2,1996-12-29,98,negative,,same,13
+PS690P2,06/03/1964,92,positive,,same,13
+PS691P2,,52,-99,,same,13
+PS692P2,"Feb 19, 2007",13,negative,,same,13
+PS693P2,"Nov 26, 2004",29,N/A,,same,13
+PS694P2,1982-03-26,64,N/A,,same,13
+PS695P2,04/07/1966,thirty,negative,,same,13
+PS696P2,07/05/1951,85,negative,,same,13
+PS697P2,"May 30, 1989",58,negative,,same,13
+PS698P2,"Jul 16, 2004",50,N/A,,same,13
+PS699P2,"Feb 06, 1998",4,N/A,,same,13
+PS700P2,1953-10-21,94,positive,,same,14
+PS701P2,2006-07-31,38,inconclusive,,same,14
+PS702P2,2005-01-03,59,-99,,same,14
+PS703P2,"Feb 16, 1966",17,-99,,same,14
+PS704P2,18/01/1966,25,-99,,same,14
+PS705P2,"Mar 09, 2008",15,positive,,same,14
+PS706P2,1982-07-24,65,N/A,,same,14
+PS707P2,1984-02-23,72,negative,,same,14
+PS708P2,09/08/1954,57,inconclusive,,same,14
+PS709P2,,NULL,-99,,same,14
+PS710P2,1994-04-09,58,-99,,same,14
+PS711P2,1950-08-04,80,N/A,,same,14
+PS712P2,1966-08-01,18,positive,,same,14
+PS713P2,10/10/1976,fifty,negative,,same,14
+PS714P2,"Apr 18, 2009",71,negative,,same,14
+PS715P2,1982-04-25,47,-99,,same,14
+PS716P2,1999-05-21,forty,inconclusive,,same,14
+PS717P2,"Oct 03, 1968",80,N/A,,same,14
+PS718P2,"Apr 04, 2004",40,inconclusive,,same,14
+PS719P2,"Aug 21, 1961",80,-99,,same,14
+PS720P2,2004-09-03,0,unknown,,same,14
+PS721P2,"Aug 07, 1968",42,inconclusive,,same,14
+PS722P2,"Jan 06, 1951",8,inconclusive,,same,14
+PS723P2,1950-07-20,92,N/A,,same,14
+PS724P2,1965-10-04,86,-99,,same,14
+PS725P2,2007-12-04,68,inconclusive,,same,14
+PS726P2,"Jan 10, 1955",40,N/A,,same,14
+PS727P2,05/10/1979,twenty,inconclusive,,same,14
+PS728P2,"Nov 21, 1964",14,inconclusive,,same,14
+PS729P2,02/11/1952,30,inconclusive,N/A,same,14
+PS730P2,09/02/1997,4,negative,,same,14
+PS731P2,28/03/1952,43,-99,,same,14
+PS732P2,1979-05-15,thirty,negative,,same,14
+PS733P2,-99,76,positive,-99,same,14
+PS734P2,"Sep 14, 1996",,negative,,same,14
+PS735P2,"Oct 27, 1974",15,inconclusive,,same,14
+PS736P2,"May 15, 1951",forty,N/A,,same,14
+PS737P2,"Jun 01, 1975",forty,N/A,,same,14
+PS738P2,31/02/2000,11,-99,,same,14
+PS739P2,"Mar 07, 2003",78,inconclusive,,same,14
+PS740P2,"Mar 10, 2010",97,-99,,same,14
+PS741P2,1992-01-05,90,-99,N/A,same,14
+PS742P2,07/05/2005,89,inconclusive,NULL,same,14
+PS743P2,1993-09-26,fifty,-99,,same,14
+PS744P2,"Apr 11, 1981",51,positive,,same,14
+PS745P2,"Feb 07, 1977",30,N/A,,same,14
+PS746P2,11/04/1993,88,N/A,missing,same,14
+PS747P2,"Sep 13, 1980",85,positive,,same,14
+PS748P2,1993-08-28,71,positive,,same,14
+PS749P2,1986-05-29,76,-99,,same,14
+PS750P2,1955-07-08,twenty,negative,,same,15
+PS751P2,25/02/1976,26,inconclusive,,same,15
+PS752P2,19/12/2010,91,inconclusive,,same,15
+PS753P2,"Nov 10, 2004",forty,positive,,same,15
+PS754P2,1954-10-07,45,positive,N/A,same,15
+PS755P2,"Sep 24, 1988",91,-99,,same,15
+PS756P2,"Dec 13, 1968",fifty,inconclusive,,same,15
+PS757P2,2010-02-11,twenty,negative,,same,15
+PS758P2,1989-03-07,53,-99,,same,15
+PS759P2,"Mar 11, 1988",70,-99,,same,15
+PS760P2,NULL,30,N/A,missing,same,15
+PS761P2,1982-12-03,90,inconclusive,,same,15
+PS762P2,1957-03-08,96,inconclusive,,same,15
+PS763P2,2004-09-24,84,positive,,same,15
+PS764P2,01/01/2002,68,positive,,same,15
+PS765P2,"Feb 05, 1992",37,inconclusive,,same,15
+PS766P2,"Aug 14, 2003",33,positive,,same,15
+PS767P2,2001-05-24,94,NULL,,same,15
+PS768P2,1995-05-12,16,N/A,-99,same,15
+PS769P2,"Jan 04, 1960",19,-99,,same,15
+PS770P2,11/03/1971,4,inconclusive,missing,same,15
+PS771P2,31/10/1963,49,negative,,same,15
+PS772P2,1965-01-03,6,inconclusive,,same,15
+PS773P2,13/01/1965,95,N/A,,same,15
+PS774P2,29/12/1984,55,positive,,same,15
+PS775P2,"Apr 09, 1984",5,positive,,same,15
+PS776P2,"Sep 26, 1988",42,inconclusive,,same,15
+PS777P2,"Sep 14, 2008",95,negative,,same,15
+PS778P2,"Jun 28, 1967",23,inconclusive,,same,15
+PS779P2,1956-02-05,87,-99,,same,15
+PS780P2,1972-08-07,7,N/A,,same,15
+PS781P2,"Oct 10, 2003",11,N/A,,same,15
+PS782P2,"Feb 16, 2008",14,negative,,same,15
+PS783P2,"Oct 17, 1956",98,-99,,same,15
+PS784P2,06/01/1979,twenty,-99,,same,15
+PS785P2,1973-09-29,25,N/A,,same,15
+PS786P2,1959-09-24,78,positive,,same,15
+PS787P2,1959-04-08,32,NULL,,same,15
+PS788P2,2007-06-13,34,negative,missing,same,15
+PS789P2,"May 02, 1950",61,-99,,same,15
+PS790P2,"Apr 16, 1956",88,-99,,same,15
+PS791P2,15/03/1982,80,positive,,same,15
+PS792P2,21/03/1957,25,negative,unknown,same,15
+PS793P2,19/02/1967,80,inconclusive,NULL,same,15
+PS794P2,1966-12-31,missing,negative,,same,15
+PS795P2,"Jun 30, 1998",57,positive,,same,15
+PS796P2,03/11/1953,85,N/A,,same,15
+PS797P2,1998-02-20,9,positive,,same,15
+PS798P2,17/09/1951,31,unknown,,same,15
+PS799P2,1977-07-28,75,positive,,same,15
+PS799P2,1977-07-28,75,positive,,same,15
+PS801P2,"Aug 08, 1994",25,-99,,same,16
+PS802P2,11/11/2010,73,N/A,,same,16
+PS803P2,1969-02-17,15,inconclusive,,same,16
+PS804P2,"Mar 10, 1983",74,positive,,same,16
+PS805P2,"Sep 19, 2006",62,N/A,unknown,same,16
+PS806P2,"Jun 21, 2008",98,-99,,same,16
+PS807P2,27/05/2007,22,N/A,,same,16
+PS808P2,"Nov 06, 1994",100,inconclusive,,same,16
+PS809P2,1971-02-21,12,N/A,,same,16
+PS810P2,"Jun 03, 1998",84,negative,,same,16
+PS811P2,"May 22, 1963",63,negative,-99,same,16
+PS812P2,08/11/2007,42,N/A,,same,16
+PS813P2,1953-11-20,22,negative,,same,16
+PS814P2,1960-05-31,75,N/A,,same,16
+PS815P2,22/09/2010,thirty,positive,,same,16
+PS816P2,10/12/1967,fifty,positive,,same,16
+PS817P2,03/09/2004,58,negative,N/A,same,16
+PS818P2,1980-02-19,35,negative,,same,16
+PS819P2,1987-07-10,37,N/A,,same,16
+PS820P2,2004-11-11,29,positive,,same,16
+PS821P2,"Jun 02, 1969",1,-99,,same,16
+PS822P2,13/05/1979,75,negative,NULL,same,16
+PS823P2,1953-12-20,64,positive,,same,16
+PS824P2,17/10/1958,twenty,-99,,same,16
+PS825P2,1976-07-15,fifty,inconclusive,,same,16
+PS826P2,"Mar 04, 2001",59,negative,,same,16
+PS827P2,"Mar 26, 1983",80,positive,,same,16
+PS828P2,1997-08-19,89,N/A,,same,16
+PS829P2,"Apr 06, 1957",7,N/A,,same,16
+PS830P2,1954-08-17,5,inconclusive,,same,16
+PS831P2,"Jan 05, 1956",42,negative,,same,16
+PS832P2,"Jan 17, 2002",28,inconclusive,,same,16
+PS833P2,11/12/1987,57,-99,,same,16
+PS834P2,"Mar 07, 1992",37,-99,,same,16
+PS835P2,1955-11-21,10,-99,,same,16
+PS836P2,1956-11-26,thirty,-99,,same,16
+PS837P2,2006-04-11,69,negative,,same,16
+PS838P2,2007-11-03,thirty,N/A,,same,16
+PS839P2,"Oct 02, 1980",75,N/A,,same,16
+PS840P2,"Apr 13, 1977",21,inconclusive,,same,16
+PS841P2,1975-11-07,21,N/A,,same,16
+PS842P2,1975-08-04,88,negative,,same,16
+PS843P2,"May 29, 1978",23,negative,,same,16
+PS844P2,08/06/1978,20,N/A,NULL,same,16
+PS845P2,1994-10-21,19,positive,,same,16
+PS846P2,10/07/1995,37,N/A,,same,16
+PS847P2,30/08/1989,5,negative,,same,16
+PS848P2,23/03/1952,45,positive,,same,16
+PS849P2,"Jul 05, 1967",98,inconclusive,,same,16
+PS850P2,"Dec 18, 1989",fifty,negative,,same,17
+PS851P2,1995-11-23,18,-99,,same,17
+PS852P2,16/07/1975,71,positive,unknown,same,17
+PS853P2,15/04/1987,54,-99,,same,17
+PS854P2,1957-09-21,67,inconclusive,NULL,same,17
+PS855P2,1957-12-08,53,negative,,same,17
+PS856P2,1962-04-14,70,-99,,same,17
+PS857P2,03/07/2002,28,positive,,same,17
+PS858P2,"Dec 05, 1976",83,inconclusive,,same,17
+PS859P2,,8,N/A,,same,17
+PS860P2,27/09/2000,60,positive,,same,17
+PS861P2,31/02/2000,forty,-99,,same,17
+PS862P2,1964-08-26,45,positive,,same,17
+PS863P2,"Nov 22, 1956",97,positive,,same,17
+PS864P2,11/12/1978,38,inconclusive,,same,17
+PS865P2,"Aug 07, 1958",1,negative,,same,17
+PS866P2,03/07/1993,13,negative,,same,17
+PS867P2,"Nov 27, 1966",67,N/A,,same,17
+PS868P2,23/03/1960,thirty,positive,,same,17
+PS869P2,1982-07-12,76,N/A,,same,17
+PS870P2,1977-05-02,thirty,negative,,same,17
+PS871P2,1968-10-29,97,positive,,same,17
+PS872P2,1988-09-09,unknown,N/A,,same,17
+PS873P2,1972-09-12,96,positive,N/A,same,17
+PS874P2,2002-09-19,11,negative,missing,same,17
+PS875P2,16/03/1981,93,N/A,,same,17
+PS876P2,"Nov 22, 1958",91,negative,,same,17
+PS877P2,1998-03-10,thirty,N/A,,same,17
+PS878P2,2002-11-16,23,inconclusive,,same,17
+PS879P2,1996-02-19,40,positive,,same,17
+PS880P2,25/06/1994,5,positive,,same,17
+PS881P2,12/06/1975,56,negative,,same,17
+PS882P2,1988-05-24,60,inconclusive,NULL,same,17
+PS883P2,2010-04-19,86,positive,,same,17
+PS884P2,2002-12-25,21,positive,,same,17
+PS885P2,"Dec 20, 1967",29,-99,,same,17
+PS886P2,"Mar 17, 2002",82,-99,,same,17
+PS887P2,14/04/1986,fifty,positive,,same,17
+PS888P2,"Sep 16, 1970",unknown,positive,,same,17
+PS889P2,1952-05-26,19,inconclusive,,same,17
+PS890P2,"Nov 12, 1956",59,negative,,same,17
+PS891P2,16/04/1995,69,-99,-99,same,17
+PS892P2,01/06/1984,58,positive,,same,17
+PS893P2,"Mar 10, 1977",39,-99,,same,17
+PS894P2,24/07/2010,73,-99,missing,same,17
+PS895P2,01/01/1955,48,N/A,,same,17
+PS896P2,09/07/1975,16,inconclusive,,same,17
+PS897P2,"May 31, 1952",forty,inconclusive,,same,17
+PS898P2,1971-11-29,10,positive,,same,17
+PS899P2,1965-03-26,unknown,-99,,same,17
+PS900P2,"Oct 31, 1951",,-99,,same,18
+PS901P2,08/10/1958,43,-99,,same,18
+PS902P2,1980-06-18,55,negative,,same,18
+PS903P2,"Oct 04, 1956",38,N/A,,same,18
+PS904P2,"Apr 02, 1958",forty,inconclusive,,same,18
+PS905P2,21/08/1992,83,inconclusive,,same,18
+PS906P2,"Jul 10, 2009",32,N/A,,same,18
+PS907P2,1999-02-15,66,negative,,same,18
+PS908P2,04/12/1991,78,-99,,same,18
+PS909P2,"May 17, 1955",30,negative,,same,18
+PS910P2,22/01/1989,8,negative,,same,18
+PS911P2,"Oct 02, 1975",30,-99,,same,18
+PS912P2,1952-06-26,62,N/A,,same,18
+PS913P2,1953-04-27,forty,inconclusive,,same,18
+PS914P2,"Oct 15, 1953",-99,inconclusive,NULL,same,18
+PS915P2,"Aug 10, 1982",thirty,negative,,same,18
+PS916P2,"Oct 28, 1960",99,N/A,N/A,same,18
+PS917P2,2003-10-24,74,-99,,same,18
+PS918P2,1987-12-09,35,-99,-99,same,18
+PS919P2,"Dec 29, 1993",40,N/A,,same,18
+PS920P2,1974-12-01,39,positive,-99,same,18
+PS921P2,2009-05-30,30,inconclusive,,same,18
+PS922P2,"Jul 22, 1982",56,NULL,,same,18
+PS923P2,1976-12-29,38,negative,,same,18
+PS924P2,"May 16, 1989",82,-99,,same,18
+PS925P2,09/03/1957,42,-99,,same,18
+PS926P2,"May 21, 1964",fifty,N/A,,same,18
+PS927P2,26/04/1979,82,negative,,same,18
+PS928P2,1962-03-18,40,N/A,,same,18
+PS929P2,"Apr 29, 1996",97,negative,,same,18
+PS930P2,28/08/1978,33,negative,,same,18
+PS931P2,1975-04-13,50,-99,N/A,same,18
+PS932P2,1951-11-11,80,negative,N/A,same,18
+PS933P2,"Jun 27, 1973",fifty,N/A,,same,18
+PS934P2,1983-01-04,fifty,-99,,same,18
+PS935P2,"Feb 20, 1970",100,inconclusive,,same,18
+PS936P2,06/09/1961,36,negative,,same,18
+PS937P2,1963-02-04,79,-99,,same,18
+PS938P2,25/01/2008,41,-99,,same,18
+PS939P2,"Dec 23, 1987",twenty,positive,,same,18
+PS940P2,"Oct 14, 1981",76,missing,,same,18
+PS941P2,20/02/1977,twenty,N/A,,same,18
+PS942P2,20/03/1994,forty,N/A,,same,18
+PS943P2,1978-02-08,35,inconclusive,,same,18
+PS944P2,"Aug 13, 1973",66,inconclusive,,same,18
+PS945P2,1994-01-28,81,-99,,same,18
+PS946P2,1970-08-16,90,-99,NULL,same,18
+PS947P2,29/08/1953,62,-99,,same,18
+PS948P2,1963-04-14,36,negative,,same,18
+PS949P2,"Jun 22, 1974",74,positive,,same,18
+PS950P2,1987-05-12,12,unknown,-99,same,19
+PS951P2,13/05/1985,41,NULL,,same,19
+PS952P2,03/03/2009,76,positive,,same,19
+PS953P2,01/11/2005,93,N/A,unknown,same,19
+PS954P2,21/05/1975,70,N/A,,same,19
+PS955P2,1965-12-21,11,positive,,same,19
+PS956P2,06/02/1986,19,positive,,same,19
+PS957P2,"Oct 27, 1977",12,inconclusive,,same,19
+PS958P2,25/10/1984,11,-99,,same,19
+PS959P2,"Dec 11, 1988",forty,-99,,same,19
+PS960P2,30/11/1963,10,inconclusive,,same,19
+PS961P2,06/11/1992,forty,negative,,same,19
+PS962P2,"Apr 13, 1954",twenty,N/A,,same,19
+PS963P2,"Apr 15, 2009",32,N/A,,same,19
+PS964P2,"Mar 22, 1960",23,-99,,same,19
+PS965P2,14/09/1976,85,-99,,same,19
+PS966P2,1966-10-17,77,inconclusive,,same,19
+PS967P2,-99,unknown,-99,,same,19
+PS968P2,"Jan 03, 2009",79,N/A,,same,19
+PS969P2,26/07/2010,thirty,positive,,same,19
+PS970P2,1966-11-20,83,negative,,same,19
+PS971P2,1998-04-27,18,-99,,same,19
+PS972P2,"Sep 04, 1963",60,positive,,same,19
+PS973P2,24/01/1968,6,unknown,,same,19
+PS974P2,26/09/1988,76,N/A,,same,19
+PS975P2,09/11/1985,86,-99,,same,19
+PS976P2,16/09/1951,34,-99,,same,19
+PS977P2,"Nov 12, 2005",2,negative,,same,19
+PS978P2,06/11/1980,87,inconclusive,unknown,same,19
+PS979P2,09/12/2008,91,-99,,same,19
+PS980P2,"May 22, 2010",20,N/A,,same,19
+PS981P2,"Sep 25, 1957",20,N/A,,same,19
+PS982P2,18/04/1994,2,inconclusive,,same,19
+PS983P2,1964-03-25,4,positive,,same,19
+PS984P2,31/02/2000,43,inconclusive,,same,19
+PS985P2,22/12/1999,65,N/A,,same,19
+PS986P2,12/04/1989,13,N/A,-99,same,19
+PS987P2,2000-06-18,15,negative,,same,19
+PS988P2,"Mar 17, 1976",93,positive,,same,19
+PS989P2,1962-05-12,53,positive,,same,19
+PS990P2,15/08/1980,forty,-99,,same,19
+PS991P2,"Aug 08, 1963",54,-99,missing,same,19
+PS992P2,1982-06-16,91,N/A,,same,19
+PS993P2,30/03/1978,7,-99,,same,19
+PS994P2,2007-07-20,forty,-99,,same,19
+PS995P2,01/09/1999,44,positive,missing,same,19
+PS996P2,"Mar 06, 1963",69,N/A,,same,19
+PS997P2,"Dec 22, 1980",38,positive,,same,19
+PS998P2,"Apr 21, 1961",11,N/A,,same,19
+PS999P2,missing,30,inconclusive,-99,same,19
+PS999P2,missing,30,inconclusive,-99,same,19
