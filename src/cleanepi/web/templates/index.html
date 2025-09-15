@@ -207,6 +207,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const progressSection = document.getElementById('progressSection');
     const progressText = document.getElementById('progressText');
     const resultsModal = new bootstrap.Modal(document.getElementById('resultsModal'));
+    const downloadBtn = document.getElementById('downloadResults');
+    let lastUploadedFile = null;
+    let lastConfig = null;
+    downloadBtn.disabled = true;
 
     // File upload area interactions
     fileUploadArea.addEventListener('click', () => fileInput.click());
@@ -294,6 +298,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
             
             if (processingMode === 'sync') {
+                // Store for download reuse
+                lastUploadedFile = file;
+                lastConfig = config;
+                downloadBtn.disabled = false;
                 showResults(result);
             } else {
                 showAlert(`Job submitted successfully! Job ID: ${result.job_id}`, 'success');
@@ -306,6 +314,44 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = false;
             progressSection.classList.add('d-none');
             submitText.textContent = 'Clean Data';
+        }
+    });
+
+    // Download cleaned results as CSV
+    downloadBtn.addEventListener('click', async function() {
+        try {
+            const file = lastUploadedFile || (fileInput.files && fileInput.files[0]);
+            const config = lastConfig || buildConfig();
+            if (!file) {
+                showAlert('No file available to download. Please upload and process a file first.', 'warning');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('config_json', JSON.stringify(config));
+
+            const resp = await fetch('/api/clean/download', {
+                method: 'POST',
+                body: formData
+            });
+            if (!resp.ok) {
+                const err = await resp.json().catch(() => ({ detail: `HTTP ${resp.status}` }));
+                throw new Error(err.detail || `HTTP ${resp.status}`);
+            }
+
+            const blob = await resp.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const baseName = (file.name || 'cleanepi_output').replace(/\.[^.]+$/, '');
+            a.download = `${baseName}_cleaned.csv`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            showAlert(`Download failed: ${error.message}`, 'danger');
         }
     });
     
